@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/paginas.css';
+import PublicationCard from '../../components/PublicationCard.astro';
+import { todasLasPublicaciones } from '../../lib/publicaciones';
+const posts = await todasLasPublicaciones();
+---
+<BaseLayout title="Publicaciones | Lighthouse D&A" description="Catálogo editorial de Lighthouse D&A. Investigaciones, análisis y demostraciones identificadas con transparencia." active="publicaciones" pageClass="section-page" demo={posts.length > 0 && posts.every(p=>p.data.demo)}>
+  <main id="contenido">
+    <section class="page-hero"><div class="container"><nav class="page-breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">Publicaciones</span></nav><p class="eyebrow"><span class="square"></span> EL ESPACIO EDITORIAL</p><h1 id="page-title">Publicaciones<span class="green-period">.</span></h1><p class="page-lead">Análisis y artículos basados en preguntas, evidencia y claridad.</p></div></section>
+    <section class="publications catalogue" aria-label="Archivo de publicaciones"><div class="container">
+      {posts.some(p => p.data.demo) && <p class="sample-note"><span class="sample-dot" aria-hidden="true"></span> Las demostraciones utilizan datos simulados y no representan investigaciones oficiales.</p>}
+      {posts.length > 0 ? <div class:list={{ 'publication-grid': posts.length > 1 }}>{posts.map(post => <PublicationCard post={post} featured={posts.length === 1} />)}</div> : <p>Estamos preparando nuestras próximas publicaciones.</p>}
+    </div></section>
+  </main>
+</BaseLayout>

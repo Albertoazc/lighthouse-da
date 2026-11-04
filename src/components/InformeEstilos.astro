@@ -1,0 +1,25 @@
+<!-- Este componente aplica estilos editoriales SOLO a los artículos MDX donde se importa. -->
+<style is:global>
+  .article-page .article-body > h2{
+    font:400 clamp(31px,3vw,40px)/1.22 'DM Serif Display',Georgia,serif;
+    color:#163f4d;letter-spacing:-.45px;margin:61px 0 23px;padding-top:22px;
+    border-top:1px solid #e4eee4;overflow-wrap:normal;
+  }
+  .article-page .article-body > h3{
+    font:700 21px/1.3 'DM Sans',Arial,sans-serif;color:#254d57;margin:33px 0 15px;
+  }
+  .article-page .article-body > p{font-size:16px;line-height:1.85;color:#475f67;margin-bottom:22px;}
+  .article-page .article-body > ul{padding-left:24px;font-size:16px;color:#475f67;line-height:1.8;margin:0 0 27px;}
+  .article-page .article-body > ul li{padding-left:4px;margin-bottom:10px;}
+  .article-page .article-body > blockquote{
+    margin:34px 0;padding:9px 0 9px 25px;border-left:3px solid #84b779;
+    font:400 27px/1.45 'DM Serif Display',Georgia,serif;color:#215362;
+  }
+  .article-page .article-body > blockquote p{margin:0;color:inherit;font:inherit;}
+  .article-page .article-body > p:first-child{font-size:18px;color:#284d5a;line-height:1.75;}
+  @media(max-width:560px){
+    .article-page .article-body > h2{margin-top:48px;font-size:31px;}
+    .article-page .article-body > blockquote{font-size:23px;}
+    .article-page .article-body > p{font-size:15px;}
+  }
+</style>

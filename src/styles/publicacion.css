@@ -1,0 +1,87 @@
+/* Lighthouse D&A — sistema editorial / Iteración 04.
+   Estilos de artículos largos; comparte tipografía y colores con global.css. */
+.article-page { background: #fff; }
+.article-heading { max-width: 880px; padding: 48px 0 10px; }
+.article-body > h2 { font: 400 clamp(30px,3vw,40px)/1.22 var(--font-title); margin: 48px 0 22px; scroll-margin-top: 110px; }
+.article-body > h3 { font-size: 21px; margin: 30px 0 15px; }
+.article-body > table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.article-body > table th,.article-body > table td { padding: 10px; border-bottom: 1px solid var(--line); }
+@media (max-width: 560px) { .article-heading { padding-top: 32px; } }
+.article-page .site-header { background: rgba(255,255,255,.98); }
+.reading-progress { height: 3px; position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: transparent; pointer-events: none; }
+.reading-progress span { display: block; width: 0%; height: 100%; background: #78ac65; transition: width .1s linear; }
+.article-header-back { display: none; font-size: 12px; color: #356272; white-space: nowrap; padding: 7px 0 7px 12px; border-left: 1px solid #d5e2d8; }
+.article-header-back:hover { color: #5c9868; }
+.article-container { width: min(100% - 110px, 1140px); margin-inline: auto; }
+.article-hero { position: relative; overflow: hidden; background: linear-gradient(115deg,#f8fbf6 8%,#f2f7f0 58%,#e8f2e8 100%); border-bottom: 1px solid #e2ebe3; }
+.article-hero::before { content: ''; position: absolute; pointer-events: none; inset: 0 0 0 auto; width: 42%; background-image: linear-gradient(#b5cebc 1px,transparent 1px),linear-gradient(90deg,#b5cebc 1px,transparent 1px); background-size: 63px 63px; opacity: .17; mask-image: linear-gradient(to right,transparent,#000); }
+.breadcrumbs { position: relative; display: flex; align-items: center; gap: 13px; font-size: 11px; color: #6b8585; padding: 28px 0 0; }
+.breadcrumbs a:hover { color: #3c896e; }
+.breadcrumbs span[aria-hidden] { color: #a6bcb2; }
+.article-hero h1 { color: #133b49; font: 400 clamp(43px,5.25vw,74px)/1.08 var(--font-title); letter-spacing: -1.3px; margin: 0 0 23px; overflow-wrap: normal; }
+.article-hero h1 em { font-style: normal; color: #518873; }
+.article-deck { font-size: clamp(17px,1.6vw,21px); line-height: 1.55; color: #4d6870; max-width: 720px; margin: 0 0 34px; }
+.article-meta { display: flex; align-items: center; gap: 13px; }
+.author-info { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: #6d8285; }
+.author-info strong { color: #1c4954; font-size: 13px; }
+.share-button { margin-left: auto; padding: 9px 12px; background: transparent; border: 1px solid #bbd3c5; color: #285b62; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 7px; border-radius: 5px; white-space: nowrap; transition: background .2s; }
+.share-button:hover { background: #e5f0e4; }
+.share-button svg { width: 15px; height: 15px; }
+.share-feedback { font-size: 11px; color: #357555; margin: 7px 0 0; min-height: 15px; }
+.article-trust { position: relative; border-top: 1px solid #dce9d9; padding: 14px 0 18px; color: #698079; font-size: 11px; display: flex; align-items: center; gap: 15px; line-height: 1.5; }
+.trust-badge { display: inline-flex; align-items: center; padding: 6px 8px; color: #376e52; background: #e4f0d9; white-space: nowrap; font-size: 9px; letter-spacing: 1.3px; font-weight: 800; }
+
+/* Lectura y navegación lateral */
+.article-layout { display: grid; grid-template-columns: minmax(0,756px) minmax(200px,1fr); grid-template-areas: 'body sidebar'; gap: clamp(45px,8vw,100px); padding-top: 63px; padding-bottom: 94px; align-items: start; }
+.article-body { grid-area: body; min-width: 0; font-size: 17px; color: #425660; line-height: 1.82; }
+.article-body p { margin: 0 0 23px; overflow-wrap: normal; }
+.article-body strong { color: #204756; font-weight: 700; }
+
+/* Índice de lectura */
+.article-sidebar { grid-area: sidebar; position: sticky; top: 123px; min-width: 0; }
+.toc { border-left: 1px solid #dae7dd; padding-left: 22px; }
+.toc-label { color: #4f765f; font-size: 10px; letter-spacing: 2px; font-weight: 800; text-transform: uppercase; cursor: pointer; padding: 8px 0; }
+.toc nav { display: flex; flex-direction: column; gap: 3px; margin: 20px 0 32px; }
+.toc nav a { color: #698185; padding: 9px 11px; font-size: 12px; line-height: 1.5; border-left: 2px solid transparent; margin-left: -24px; transition: background .2s,color .2s; }
+.toc nav a:hover { color: #194754; background: #f0f6ed; }
+.toc nav a.toc-active { color: #245766; font-weight: 800; border-left-color: #6caa6d; background: #f1f7ef; }
+
+@media (max-width: 1150px) {
+  .article-container { width: min(100% - 76px,1140px); }
+  .article-layout { grid-template-columns: minmax(0,730px) 205px; gap: 44px; }
+  .article-hero h1 { font-size: clamp(41px,5vw,67px); }
+}
+@media (max-width: 900px) {
+  .article-container { width: min(100% - 52px,770px); }
+  .article-layout { display: flex; flex-direction: column; gap: 0; padding-top: 50px; }
+  .article-sidebar { order: -1; width: 100%; position: static; margin-bottom: 36px; }
+  .toc { border: 1px solid var(--line); border-radius: 5px; background: #f8fbf6; padding: 10px 20px; }
+  .toc-label { font-size: 11px; }
+  .toc nav { margin: 12px 0; }
+  .toc nav a { margin-left: 0; padding: 11px 12px; }
+  .article-body { width: 100%; font-size: 16px; }
+}
+@media (max-width: 740px) {
+  .article-header-back { display: inline-flex; margin-left: auto; }
+  .article-page .menu-toggle { margin-left: 5px; }
+}
+@media (max-width: 560px) {
+  .article-container { width: min(100% - 36px,770px); }
+  .article-header-back span { display: none; }
+  .article-header-back { font-size: 24px; padding: 2px 10px; }
+  .breadcrumbs { padding-top: 19px; gap: 9px; font-size: 10px; }
+  .article-hero h1 { font-size: clamp(41px,10vw,55px); }
+  .article-deck { font-size: 16px; }
+  .article-meta { flex-wrap: wrap; }
+  .share-button { margin-left: 0; }
+  .article-trust { align-items: flex-start; flex-direction: column; gap: 7px; }
+  .article-body { font-size: 15.5px; line-height: 1.75; }
+  .article-body p,.article-hero h1 { overflow-wrap: anywhere; }
+}
+@media print {
+  .site-header,.reading-progress,.article-sidebar,.share-button,.article-header-back,.mobile-nav { display: none !important; }
+  .article-hero { background: none; }
+  .article-container { width: 100%; }
+  .article-layout { display: block; padding-top: 18px; }
+  .site-footer { display: none; }
+}

@@ -1,0 +1,60 @@
+---
+interface Serie { nombre:string; color:string; valores:number[]; }
+interface Props { titulo:string; subtitulo:string; periodos:string[]; series:Serie[]; fuente?:string; unidad?:string; base?:number; }
+const {titulo,subtitulo,periodos,series,fuente='Fuente: simulación didáctica. Índices inventados, 2019 = 100.',unidad=`Índice base ${periodos[0] ?? ''} = 100`,base=100} = Astro.props;
+if (!periodos.length || !series.length || series.some(s => s.valores.length !== periodos.length || s.valores.some(v => !Number.isFinite(v)))) {
+  throw new Error('InformeLinea necesita períodos y series numéricas de igual longitud.');
+}
+const W=800,H=380,left=53,right=20,top=25,bottom=70;
+const values=series.flatMap(s=>s.valores);
+const low=Math.min(...values), high=Math.max(...values);
+const roughStep=Math.max(1,high-low)/4;
+const magnitude=10**Math.floor(Math.log10(roughStep));
+const step=([1,2,5,10].find(n=>n*magnitude>=roughStep) ?? 10)*magnitude;
+const min=Math.floor(low/step)*step;
+const max=Math.max(min+step,Math.ceil(high/step)*step);
+const x=(i:number) => left + i*(W-left-right)/Math.max(1,periodos.length-1);
+const y=(v:number) => top + (max-v)/(max-min)*(H-top-bottom);
+const ticks=Array.from({length:Math.round((max-min)/step)+1},(_,i)=>min+i*step);
+const trazo=(valores:number[]) => valores.map((v,i)=>`${i?'L':'M'} ${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+const chartAlt = `Evolución en índices de ${periodos[0]} a ${periodos.at(-1)}. ${series.map(s=>s.nombre+': '+s.valores.join(', ')).join('. ')}`;
+---
+<figure class="report-figure">
+  <header class="report-figure-heading">
+    <span class="figure-marker">VISUALIZACIÓN / 01</span>
+    <h3>{titulo}</h3>
+    <p>{subtitulo}</p>
+  </header>
+  <div class="chart-legend" aria-hidden="true">
+    {series.map(s=><span><i style={`--serie:${s.color}`}></i>{s.nombre}</span>)}
+  </div>
+  <div class="chart-scroll" tabindex="0" role="region" aria-label={`${titulo}. Desliza horizontalmente en pantallas pequeñas.`}>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={chartAlt}>
+    {ticks.map(t=><g><line class="gridline" x1={left} y1={y(t)} x2={W-right} y2={y(t)}/><text class="tick" text-anchor="end" x={left-13} y={y(t)+5}>{t}</text></g>)}
+    {periodos.map((p,i)=><text class="tick" text-anchor="middle" x={x(i)} y={H-32}>{p}</text>)}
+    {base >= min && base <= max && <line class="baseline" x1={left} x2={W-right} y1={y(base)} y2={y(base)} stroke-dasharray="5 5" />}
+    {series.map(s=><g>
+      <path d={trazo(s.valores)} fill="none" stroke={s.color} stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+      {s.valores.map((v,i)=><circle cx={x(i)} cy={y(v)} r="4.8" fill={s.color} stroke="#fff" stroke-width="2"><title>{s.nombre}, {periodos[i]}: {v}</title></circle>)}
+    </g>)}
+    <text class="axis-name" x={left} y={H-8}>{unidad}</text>
+  </svg>
+  </div>
+  <figcaption>{fuente} Las líneas muestran trayectorias descriptivas; no identifican efectos causales.</figcaption>
+</figure>
+<style>
+  .report-figure{margin:34px 0 40px;padding:27px 28px 20px;border:1px solid #dce9df;border-radius:12px;background:#fff;box-shadow:0 12px 34px #153b450a;}
+  .figure-marker{font-size:10px;letter-spacing:1.7px;font-weight:800;color:#6c9b70;}
+  h3{font:400 clamp(22px,2.8vw,29px)/1.2 'DM Serif Display',Georgia,serif;color:#153d4c;margin:9px 0 5px;}
+  .report-figure-heading p{color:#72878b;font-size:13px;line-height:1.5;margin:0;}
+  .chart-legend{display:flex;flex-wrap:wrap;gap:14px 24px;margin:24px 0 10px;font-size:11px;font-weight:700;color:#435c63;}
+  .chart-legend span{display:flex;align-items:center;gap:8px;}
+  .chart-legend i{width:21px;height:3px;border-radius:3px;background:var(--serie);display:inline-block;}
+  svg{width:100%;height:auto;display:block;font-family:'DM Sans',Arial,sans-serif;}
+  .chart-scroll{overflow-x:auto;}
+  .chart-scroll svg{min-width:560px;}
+  .gridline{stroke:#e5ede7;stroke-width:1;}.baseline{stroke:#aebeb4;stroke-width:1.5;}
+  .tick{fill:#6d8285;font-size:14px;font-weight:500;}.axis-name{fill:#72868b;font-size:12px;}
+  figcaption{border-top:1px solid #e6eee8;padding-top:15px;color:#7a8e8f;line-height:1.6;font-size:11px;}
+  @media(max-width:560px){.report-figure{padding:18px 13px;}.tick{font-size:17px;}.chart-legend{gap:9px;font-size:10px;}}
+</style>

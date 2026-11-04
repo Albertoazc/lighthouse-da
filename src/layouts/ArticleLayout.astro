@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import { fechaPublicacion } from '../lib/publicaciones';
+import '../styles/publicacion.css';
+interface Props { entry: CollectionEntry<'publicaciones'>; headings: MarkdownHeading[]; }
+const { entry, headings } = Astro.props;
+const { data } = entry;
+const sections = headings.filter(heading => heading.depth === 2);
+---
+<BaseLayout title={`${data.title} | Lighthouse D&A`} description={data.description} active="publicaciones" pageClass="article-page" demo={data.demo || data.draft}>
+  <main id="contenido">
+    <div class="article-hero">
+      <div class="article-container">
+        <nav class="breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/paginas/publicaciones/">Publicaciones</a></nav>
+        <div class="article-heading">
+          <p class="category">{data.category.toUpperCase()}</p>
+          <h1>{data.title}</h1>
+          <p class="article-deck">{data.description}</p>
+          <div class="article-meta">
+            <div class="author-info"><strong>{data.authors.join(' · ')}</strong><span><time datetime={data.publishedAt.toISOString()}>{fechaPublicacion(data.publishedAt)}</time> · {data.readingMinutes} min de lectura</span></div>
+            <button class="share-button" id="share-button" type="button">Copiar enlace <span aria-hidden="true">↗</span></button>
+          </div>
+          <p class="share-feedback" id="share-feedback" role="status"></p>
+        </div>
+        {data.draft && <p class="article-trust"><strong class="trust-badge">BORRADOR</strong> Vista previa local. Esta publicación se excluye de producción.</p>}
+        {data.demo && <p class="article-trust"><strong class="trust-badge">DEMOSTRACIÓN</strong> Datos 100 % simulados. No son estadísticas reales ni resultados de una investigación oficial.</p>}
+      </div>
+    </div>
+    <div class="article-container article-layout">
+      <article id="articulo" class="article-body"><slot /></article>
+      {sections.length > 0 && <aside class="article-sidebar" aria-label="Índice del informe"><details class="toc" open><summary class="toc-label">En este informe</summary><nav>{sections.map(heading => <a href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details></aside>}
+    </div>
+  </main>
+</BaseLayout>
+<script>
+  import '../scripts/article.js';
+</script>

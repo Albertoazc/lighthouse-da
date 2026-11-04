@@ -1,0 +1,19 @@
+---
+import { enlaces as links } from '../data/navegacion';
+const { active = 'inicio', search = false, article = false } = Astro.props;
+---
+<header class="site-header" id="inicio">
+  <div class="container header-inner">
+    <a href="/" class="brand" aria-label="Lighthouse D&A, ir a Inicio"><img src="/assets/logo.svg" alt="" width="64" height="64"/><span>Lighthouse <strong>D&amp;A</strong></span></a>
+    <nav class="desktop-nav" aria-label="Navegación principal">
+      {links.map(([key, url, label]) => <a href={url} class:list={['nav-link', {active: active===key}]} aria-current={active===key?'page':undefined}>{label}</a>)}
+    </nav>
+    {article && <a class="article-header-back" href="/paginas/publicaciones/" aria-label="Volver a publicaciones">← <span>Publicaciones</span></a>}
+    {search && <button class="search-toggle" type="button" aria-label="Buscar en las publicaciones" aria-expanded="false" aria-controls="search-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg></button>}
+    <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-navigation"><span></span><span></span><span></span></button>
+  </div>
+  {search && <div class="search-panel" id="search-panel" hidden><div class="container search-panel-inner"><label for="site-search">Buscar entre las publicaciones</label><div class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg><input type="search" id="site-search" placeholder="Economía, tecnología, clima..." autocomplete="off"/><button type="button" id="clear-search" aria-label="Limpiar búsqueda">×</button></div><div id="search-results" class="search-results" aria-live="polite"></div></div></div>}
+  <nav class="mobile-nav" id="mobile-navigation" aria-label="Menú móvil" hidden>
+    {links.map(([key,url,label]) => <a href={url} aria-current={active===key?'page':undefined}>{label}</a>)}
+  </nav>
+</header>

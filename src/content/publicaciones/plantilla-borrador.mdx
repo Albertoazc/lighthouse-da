@@ -1,0 +1,34 @@
+---
+title: "Título de una nueva investigación"
+description: "Resumen de la publicación, que aparecerá en los listados."
+category: "ECONOMÍA"
+authors: ["Equipo Lighthouse D&A"]
+publishedAt: 2026-11-04
+draft: true
+demo: true
+cover: "/assets/thumb-economia.webp"
+readingMinutes: 7
+---
+
+import BarChart from '../../components/BarChart.astro'
+import datos from '../../data/datos-ejemplo.json'
+
+## Introducción
+
+Escribe aquí tu investigación. Se pueden incluir **tablas Markdown**, imágenes y componentes MDX.
+
+## Metodología
+
+Explica tus fuentes y el tratamiento de datos.
+
+## Resultados
+
+<BarChart title="Ejemplo con datos simulados" data={datos} />
+
+| Indicador | Valor |
+| --- | ---: |
+| Ejemplo | 10 |
+
+## Limitaciones
+
+Describe las limitaciones. Cambia `draft: false` cuando esté lista para publicar.

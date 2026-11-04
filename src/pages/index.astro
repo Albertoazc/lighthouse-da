@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import Hero from '../components/Hero.astro';
+import AboutBand from '../components/AboutBand.astro';
+import ClosingBand from '../components/ClosingBand.astro';
+import { todasLasPublicaciones } from '../lib/publicaciones';
+const posts = await todasLasPublicaciones();
+const [latest, ...others] = posts;
+---
+<BaseLayout title="Lighthouse D&A | Más claridad para mejores decisiones" active="inicio" search={true} demo={posts.length > 0 && posts.every(p => p.data.demo)}>
+  <main id="contenido">
+    <Hero />
+    {latest && <section class="latest-section" id="publicaciones" aria-labelledby="publications-heading">
+      <div class="container">
+        <div class="section-header"><h2 id="publications-heading">{posts.length === 1 ? 'Nuestra primera publicación' : 'Últimas publicaciones'}</h2><a class="section-link" href="/paginas/publicaciones/">Explorar el catálogo <span aria-hidden="true">→</span></a></div>
+        {latest.data.demo && <p class="sample-note"><span class="sample-dot" aria-hidden="true"></span> Informe de demostración con datos 100 % simulados.</p>}
+        <PublicationCard post={latest} featured />
+        {others.length > 0 && <div class="publication-grid additional-publications">{others.map(post => <PublicationCard post={post} />)}</div>}
+      </div>
+    </section>}
+    <AboutBand />
+    <ClosingBand />
+  </main>
+</BaseLayout>

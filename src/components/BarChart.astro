@@ -1,0 +1,43 @@
+---
+interface Datum { label: string; value: number; }
+interface Props { title: string; data: Datum[]; unit?: string; source?: string; }
+const { title, data, unit = '', source = 'Fuente: datos de ejemplo simulados.' } = Astro.props;
+if (!data.length || data.some(d => !Number.isFinite(d.value) || d.value < 0)) throw new Error('BarChart necesita valores numéricos no negativos.');
+const width = 760;
+const left = 160;
+const chartWidth = 515;
+const top = 40;
+const rowHeight = 52;
+const max = Math.max(1, ...data.map(d => d.value));
+const height = Math.max(155, top + data.length * rowHeight + 35);
+---
+<figure class="mini-chart">
+  <figcaption>{title}</figcaption>
+  <div class="chart-scroll" tabindex="0" role="region" aria-label={title}>
+  <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
+    {data.map((d, index) => (
+      <g>
+        <text x={left - 16} y={top + index * rowHeight + 27} text-anchor="end">{d.label}</text>
+        <rect class="chart-track" x={left} y={top + index * rowHeight + 7} width={chartWidth} height="30" rx="4" />
+        <rect class="chart-bar" x={left} y={top + index * rowHeight + 7} width={chartWidth * Math.max(0, d.value) / max} height="30" rx="4" />
+        <text x={left + chartWidth + 10} y={top + index * rowHeight + 27}>{d.value.toLocaleString('es-DO')}{unit}</text>
+      </g>
+    ))}
+  </svg>
+  </div>
+  <table><caption>Datos del gráfico</caption><thead><tr><th scope="col">Categoría</th><th scope="col">Valor</th></tr></thead><tbody>{data.map(d => <tr><th scope="row">{d.label}</th><td>{d.value.toLocaleString('es-DO')} {unit}</td></tr>)}</tbody></table>
+  <p class="chart-disclaimer">{source} El gráfico incluye exclusivamente los valores suministrados.</p>
+</figure>
+<style>
+  .mini-chart {margin: 2rem 0; padding: 1.5rem; border: 1px solid #dce8df; border-radius: 12px; background: #fbfdfb; color: #143b49;}
+  figcaption {font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;}
+  svg {width: 100%; height: auto; display: block; font-family: 'DM Sans',sans-serif; font-size: 14px;}
+  .chart-scroll {overflow-x: auto;}
+  .chart-scroll svg {min-width: 560px;}
+  .chart-track {fill: #e4efe8;}
+  .chart-bar {fill: #477f72;}
+  table {border-collapse: collapse; width: 100%; margin-top: 1rem; font-size: .82rem;}
+  caption {text-align: left; font-weight: 700; padding-bottom: .5rem;}
+  th,td {padding: .5rem; text-align: left; border-bottom: 1px solid #e3eee7;}
+  .chart-disclaimer {font-size: .8rem; color: #61747a;}
+</style>

@@ -1,0 +1,8 @@
+---
+import { enlaces } from '../data/navegacion';
+---
+<footer class="site-footer" id="contacto"><div class="container footer-inner">
+  <a class="footer-brand" href="/" aria-label="Lighthouse D&A, ir a Inicio"><img src="/assets/logo.svg" alt="" width="41" height="41"/><span><strong>Lighthouse D&amp;A</strong><span>Ideas que iluminan.</span></span></a>
+  <nav class="footer-nav" aria-label="Navegación del pie de página">{enlaces.map(([, href, label]) => <a href={href}>{label}</a>)}</nav>
+  <small>© <span id="current-year">2026</span> Lighthouse D&amp;A</small>
+</div></footer>
