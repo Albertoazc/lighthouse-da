@@ -3,3 +3,12 @@ Thumbs.db
 .vscode/
 node_modules/
 *.log
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo

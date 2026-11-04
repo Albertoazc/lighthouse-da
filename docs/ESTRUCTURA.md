@@ -1,45 +1,22 @@
-# Estructura y navegación · Lighthouse D&A
+# Arquitectura del repositorio
 
-## Apartados del menú
+Astro genera un sitio estático a partir de `src/pages/`. MDX está habilitado mediante `@astrojs/mdx` en `astro.config.mjs`; no se requiere servidor de aplicación en producción.
 
-| Apartado | Archivo | Contenido inicial |
-|---|---|---|
-| Inicio | `index.html` | Presentación del proyecto, avances y artículo destacado. |
-| Publicaciones | `paginas/publicaciones.html` | Catálogo con demostración y avances por tema. |
-| Nosotros | `paginas/nosotros.html` | Propósito, principios y recorrido editorial. |
-| Equipo | `paginas/equipo.html` | Áreas de trabajo y espacio para futuros perfiles. |
-| Contacto | `paginas/contacto.html` | Motivos de contacto y canales oficiales por anunciar. |
+- `src/components/`: Header, Footer, Hero, AboutBand, ClosingBand, PublicationCard y componentes de informes.
+- `src/layouts/BaseLayout.astro`: documento HTML, SEO, fuentes, estilos generales y navegación compartida.
+- `src/layouts/ArticleLayout.astro`: metadatos editoriales, avisos, índice automático y contenido del artículo.
+- `src/content.config.ts`: colección `publicaciones` con carga de MD/MDX y validación de metadatos.
+- `src/content/publicaciones/`: un informe publicado y una plantilla en borrador.
+- `src/lib/publicaciones.ts`: listado público ordenado por fecha, construcción de rutas y fechas legibles.
+- `src/pages/publicaciones/[slug].astro`: rutas estáticas; admite borradores solo en desarrollo.
+- `src/pages/paginas/`: catálogo automático, Nosotros, Equipo y Contacto, conservando las rutas existentes.
+- `src/data/`: fuente única de los datos simulados y datos de ejemplo de la plantilla.
+- `src/styles/`: estilos generales, institucionales y de artículos. Los componentes de gráficos mantienen sus estilos encapsulados.
+- `src/scripts/`: menú móvil, búsqueda sobre las tarjetas reales e interacciones del artículo. Astro empaqueta los módulos.
+- `public/assets/`: únicamente logo, faro y miniatura económica, sin recomprimir.
+- `scripts/check-site.mjs`: comprobación sin dependencias adicionales sobre los HTML compilados.
+- `.github/workflows/astro-build.yml`: instalación reproducible, compilación y validación en ramas de trabajo y PR hacia `main`.
 
-`paginas/` agrupa los apartados principales. `publicaciones/` contiene exclusivamente los artículos individuales. Las rutas de los seis artículos existentes se conservan.
+No existen importaciones `?raw` ni un renderizador alternativo de publicaciones HTML. Los originales versionados siguen en el historial de Git; no se conserva una segunda estructura activa.
 
-## Enlaces relativos
-
-- Desde Inicio: `paginas/nosotros.html` o `publicaciones/inaccion-climatica.html`.
-- Entre páginas de sección: `nosotros.html`, `equipo.html`, etc.
-- Desde una página de sección a un artículo: `../publicaciones/inaccion-climatica.html`.
-- Desde un artículo al catálogo: `../paginas/publicaciones.html`.
-- Desde cualquier subcarpeta a Inicio: `../index.html`.
-
-La navegación entre apartados utiliza enlaces HTML normales y funciona sin un enrutador de JavaScript. `site.js` controla la apertura del menú móvil y el año del pie de página.
-
-## Elementos compartidos
-
-- `styles.css`: identidad visual, cabecera, menú, pie y portada.
-- `paginas.css`: cabeceras de sección, catálogo, principios, perfiles y contacto.
-- `publicacion.css`: artículos de lectura larga.
-- `site.js`: comportamiento compartido; los enlaces y la sección activa están escritos en cada HTML.
-- `app.js`: buscador de la portada, construido a partir de las tarjetas de esa página.
-
-En las páginas del menú, `aria-current="page"` identifica el enlace activo. En los artículos, `aria-current="true"` señala Publicaciones como apartado contenedor. Mantener el mismo destino en las versiones de escritorio y móvil.
-
-Por ahora, la cabecera y el pie se escriben en cada documento para conservar el sitio estático y editable. Al cambiar un apartado, revisar los once HTML. Una siguiente fase puede incorporar plantillas compartidas.
-
-## Datos pendientes antes de publicar
-
-- Revisar los textos institucionales iniciales de Nosotros.
-- Sustituir los espacios de Equipo por nombres, roles, biografías y fotografías autorizadas.
-- Definir el correo editorial y los perfiles oficiales de Contacto.
-- Reemplazar los artículos de muestra por investigaciones verificadas.
-- Revisar la indexación de cada página: los bocetos y artículos de prueba mantienen `noindex,follow`.
-
-No se necesitan instalaciones ni un proceso de compilación. Abrir `index.html` con Live Server permite recorrer todos los apartados.
+Para agregar contenido consulta [GUIA-PUBLICACIONES.md](GUIA-PUBLICACIONES.md). Para el inventario de cambios y las pruebas consulta [INFORME-LIMPIEZA.md](INFORME-LIMPIEZA.md).

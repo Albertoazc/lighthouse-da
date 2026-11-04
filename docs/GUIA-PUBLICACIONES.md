@@ -1,77 +1,120 @@
-# Guía práctica: publicar un artículo en Lighthouse D&A
+# Guía de publicaciones
 
-## 1. Crear el archivo de artículo
+Cada artículo es un archivo MDX: Markdown con la posibilidad de importar componentes Astro. No hace falta modificar la portada, el catálogo ni crear una página Astro para cada artículo.
 
-Duplica `publicaciones/inaccion-climatica.html` y ponle un nombre corto, sin tildes ni espacios, por ejemplo `publicaciones/inversion-infraestructura.html`.
+## 1. Crear el archivo
 
-Actualiza dentro del documento:
-- `<title>` en `<head>` y la descripción meta.
-- Categoría, etiqueta editorial, `<h1>`, resumen y nombre de autor.
-- Secciones dentro de `<article class="article-body">`. Utiliza `<h2>` para capítulos, `<h3>` para subsecciones y `<p>` para texto.
-- Enlaces en el índice lateral `.toc` para que apunten a los nuevos `id` de secciones.
-- Tiempo estimado de lectura, tanto en la publicación como en su tarjeta de portada.
+Copia `src/content/publicaciones/plantilla-borrador.mdx` dentro de la misma carpeta y llámalo, por ejemplo, `mi-investigacion.mdx`. Usa minúsculas, guiones y nombres sin espacios ni acentos. Su URL será `/publicaciones/mi-investigacion/`.
 
-Conserva `site.js` antes de los scripts específicos de la página. El menú móvil y el año del pie dependen de ese archivo compartido.
+La plantilla original debe conservar `draft: true`. Su contenido y el archivo `src/data/datos-ejemplo.json` son ejemplos simulados, no una publicación real.
 
-El índice utiliza `<details class="toc" open>` y un `<summary>`. Debe ir antes de `<article>` dentro de `.article-layout`: en escritorio CSS lo coloca a la derecha y en móvil aparece antes del texto. Sin JavaScript queda abierto.
+## 2. Completar los metadatos
 
-Al publicar contenido real, **elimina** `<meta name="robots" content="noindex,follow">`, agrega una fecha de publicación real (por ejemplo `<time datetime="2026-10-24">24 de octubre de 2026</time>`) y añade fuentes y atribuciones verificables.
+El bloque inicial, entre dos líneas `---`, describe el artículo:
 
-## 2. Crear gráficos reutilizando el sistema
-
-El ejemplo contiene gráficos generados en `graficos.js`, sin Chart.js ni dependencias. Los datos residen en el objeto `DEMO_DATA`.
-
-El primer gráfico utiliza `years`, `withoutAdaptation` y `withAdaptation`. El segundo utiliza `sectors` con `sector`, `without` y `with`.
-
-Para otra publicación, puedes copiar y modificar `graficos.js`, asignarle un nombre propio (por ejemplo `grafico-infraestructura.js`) y enlazarlo únicamente en ese archivo HTML. De esa forma, los artículos no compartirán por accidente las mismas series.
-
-Inserta las gráficas en el HTML con un bloque `figure`, título (`h3`), contenedor (`div`) y explicación (`figcaption`). Es importante que cada gráfico incluya unidad, período, fuente y la explicación necesaria para interpretar los valores.
-
-En el artículo de prueba se usan los siguientes contenedores:
-
-```html
-<div id="chart-evolucion" class="chart-container" role="img"
-     aria-label="Descripción del contenido del gráfico"></div>
+```yaml
+---
+title: "Pregunta o título de la investigación"
+description: "Resumen breve que aparecerá en los listados."
+category: "ECONOMÍA"
+authors: ["Nombre de la autora", "Nombre del autor"]
+publishedAt: 2026-11-04
+cover: "/assets/thumb-economia.webp"
+readingMinutes: 8
+draft: true
+demo: false
+---
 ```
 
-> Importante: cuando cambies los datos, cambia también las descripciones de accesibilidad y actualiza la tabla del mismo documento. Actualmente la tabla se escribe en HTML para que siga siendo legible sin JavaScript.
+Todos estos campos son obligatorios excepto `draft` y `demo`: si se omiten, sus valores son `true` y `false`, respectivamente. `authors` admite una o varias personas. Guarda las portadas en `public/assets/` y referencia su ruta desde `/assets/`. Usa una fecha `AAAA-MM-DD`; se muestra sin cambios por zona horaria.
 
-## 3. Agregar el enlace en la portada
+Define `readingMinutes` como un entero positivo. Para todos los artículos usa el mismo criterio: palabras del texto ÷ 200, redondeadas hacia arriba, más un minuto por cada gráfico o tabla que requiera interpretación. Revisa el resultado editorialmente. El valor se comparte entre tarjetas y encabezado; no se recalcula en sitios distintos.
 
-El catálogo completo está en `paginas/publicaciones.html`. Agrega allí una entrada `.archive-item` y utiliza una ruta `../publicaciones/nombre-del-articulo.html`. La portada puede incluir una selección del catálogo; los títulos, estados y resúmenes deben coincidir cuando un artículo aparece en ambos lugares.
+`demo: true` muestra avisos de datos simulados y evita la indexación del artículo. Para investigaciones reales, verifica las fuentes antes de usar `demo: false`. Publicar un borrador requiere cambiar explícitamente `draft: false`.
 
-Abre `index.html`. Cada tarjeta contiene un enlace como este:
+## 3. Escribir el artículo
 
-```html
-<a class="card-button" href="publicaciones/productividad.html">
-  ...miniatura y descripción...
-</a>
+No repitas el título como `#`: el sitio genera el encabezado. Usa `##` para las secciones principales y `###` para subsecciones. El índice de lectura se genera a partir de los títulos `##`.
+
+```md
+## Introducción
+
+Explica la pregunta y por qué importa. Puedes usar **negrita**, *énfasis*
+y [enlaces a las fuentes](https://example.org/).
+
+## Metodología
+
+Documenta cobertura, unidades, fecha de extracción y tratamiento de los datos.
+
+## Resultados
+
+Explica qué muestran las cifras y qué no permiten concluir.
+
+## Limitaciones
+
+Expón los supuestos y las preguntas pendientes.
 ```
 
-Modifica el título, el resumen, la categoría y la ruta. El nombre del archivo debe coincidir con la URL. El buscador incorpora automáticamente los enlaces `.card-button` y `.latest-post` de la portada, tomando el título de `h3`, la categoría de `.category` y el resumen de `.card-summary` o del párrafo de `.latest-content`.
+Las imágenes usan `![Descripción accesible](/assets/mi-imagen.webp)`. No inventes resultados, autores, instituciones o fuentes. Distingue siempre una descripción estadística de una interpretación causal.
 
-Si necesitas palabras asociadas que no aparecen en el texto, añade `data-search-terms="clima calentamiento"` al enlace de la tarjeta. El buscador consulta este catálogo visible, no el texto completo de cada artículo.
+## 4. Insertar gráficos y tablas
 
-Incluye las dimensiones reales (`width` y `height`) y `loading="lazy" decoding="async"` en las imágenes de las tarjetas. No apliques carga diferida a la ilustración principal del faro.
+Importa los componentes después del bloque de metadatos. Los datos pueden vivir en `src/data/` como JSON o TypeScript, separados del texto.
 
-## 4. Diseño editorial
+```mdx
+import BarChart from '../../components/BarChart.astro'
+import datos from '../../data/datos-ejemplo.json'
 
-- `styles.css`: estilos globales, menú, portada y tarjetas.
-- `publicacion.css`: diseño de lectura larga, cuadros, gráficos, tablas, móvil e impresión.
-- `paginas.css`: catálogo y páginas de Nosotros, Equipo y Contacto.
-- Variables CSS al inicio de `styles.css`: paleta y fuentes.
-- Se usan **DM Sans** (texto general) y **DM Serif Display** (títulos).
+<BarChart title="Ejemplo de comparación" data={datos} unit=" %" source="Fuente: ejemplo con datos simulados." />
+```
 
-Evita gráficos exportados como capturas de pantalla si tienes los datos. El SVG, con dimensiones mediante `viewBox`, se mantiene nítido al hacer zoom y permite descargar cifras originales en CSV.
+`BarChart` recibe una lista de `{ label, value }` y admite valores no negativos. Incluye una tabla accesible. Para series y variaciones usa los componentes del informe:
 
-## 5. Lista de verificación antes de publicar
+```mdx
+import InformeLinea from '../../components/InformeLinea.astro'
+import InformeBarras from '../../components/InformeBarras.astro'
+import InformeTabla from '../../components/InformeTabla.astro'
+import InformeDestacados from '../../components/InformeDestacados.astro'
+import { registros, series, variaciones, destacados } from '../../data/inversion-simulada'
 
-- ¿Los números y las unidades están verificados?
-- ¿La tabla y los gráficos contienen los mismos datos?
-- ¿La fuente, la fecha y la metodología son claras?
-- ¿Se distingue evidencia empírica de simulaciones y opiniones?
-- ¿La página tiene metadatos de buscadores actualizados y una URL definitiva?
-- ¿Los enlaces funcionan en computador y móvil?
-- ¿Se retiraron las etiquetas 'demostración', solo si ya son reemplazadas por contenido real?
+<InformeDestacados items={destacados} />
+<InformeLinea titulo="Trayectorias de ejemplo" subtitulo="Índices simulados" periodos={registros.map(r => r.periodo)} series={series} unidad="Índice base 2019 = 100" fuente="Fuente: datos simulados de Lighthouse D&A." />
+<InformeBarras titulo="Cambios acumulados" subtitulo="Ejemplo simulado" data={variaciones} unidad="%" fuente="Fuente: cálculo sobre datos simulados." />
+<InformeTabla registros={registros} />
+```
 
-La portada y los artículos son ahora una buena base para incorporar más adelante un CMS o generar el sitio automáticamente desde Markdown.
+La línea recibe períodos y series `{ nombre, color, valores }` de igual longitud; adapta su escala a los datos. `base` permite indicar la referencia horizontal (100 por defecto). Las barras reciben `{ nombre, color, valor }`, admiten valores negativos y ajustan su eje. Mantén colores de la paleta del proyecto y especifica títulos, unidades y fuentes.
+
+`InformeTabla` conserva las columnas de inversión pública, privada y actividad. Recibe registros `{ periodo, publica, privada, actividad }` y permite cambiar `titulo`, `unidad` y `fuente`. Para tablas con otras columnas usa Markdown:
+
+```md
+| Indicador | Valor |
+| --- | ---: |
+| Ejemplo simulado | 10 |
+```
+
+Los valores de ejemplo y los textos predeterminados de los componentes son simulados. Para un informe real cambia los datos, la fuente, la unidad y los textos de tabla; en `InformeDestacados` usa `simulado={false}`. Elimina cualquier explicación que corresponda exclusivamente a una simulación. Los gráficos de líneas y las tablas tienen desplazamiento horizontal en pantallas pequeñas para conservar etiquetas legibles.
+
+## 5. Revisar localmente
+
+```sh
+npm run dev
+```
+
+Abre `/publicaciones/mi-investigacion/` en la dirección local de Astro. Los borradores se ven únicamente por su URL directa durante el desarrollo, con aviso y `noindex`; no aparecen en Inicio ni Publicaciones. La plantilla se puede consultar en `/publicaciones/plantilla-borrador/`.
+
+Comprueba escritorio y móvil: encabezado, índice, texto, leyendas, escalas, fuentes, tabla, navegación y enlaces. Revisa que las cifras del texto coincidan con las figuras.
+
+## 6. Pasar de borrador a publicación
+
+Después de la revisión editorial, establece `draft: false`, confirma la fecha y conserva `demo: true` si los datos son simulados. Ejecuta:
+
+```sh
+npm run build
+npm run test:site
+npm run preview
+```
+
+La compilación valida los metadatos. `preview` sirve la salida de producción, donde los borradores no tienen ruta. Una publicación publicada entra automáticamente en portada y catálogo. El informe más reciente queda destacado. Si todo el contenido publicado es de demostración, también la portada y el catálogo incluyen `noindex,follow`.
+
+La comprobación `test:site` valida los enlaces y recursos de todas las páginas generadas; además protege el informe de demostración actual y la exclusión de la plantilla. Actualiza esa comprobación si en el futuro se decide retirar o renombrar el informe.

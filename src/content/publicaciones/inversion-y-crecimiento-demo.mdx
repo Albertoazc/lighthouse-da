@@ -1,0 +1,90 @@
+---
+title: "¿Más inversión significa más crecimiento?"
+description: "Un ejercicio visual sobre inversión pública, inversión privada y actividad económica: qué se observa y qué no se puede concluir. Datos 100 % simulados."
+category: "ECONOMÍA"
+authors: ["Equipo Lighthouse D&A"]
+publishedAt: 2026-11-04
+cover: "/assets/thumb-economia.webp"
+draft: false
+demo: true
+readingMinutes: 8
+---
+
+import InformeEstilos from '../../components/InformeEstilos.astro'
+import InformeDestacados from '../../components/InformeDestacados.astro'
+import InformeLinea from '../../components/InformeLinea.astro'
+import InformeBarras from '../../components/InformeBarras.astro'
+import InformeTabla from '../../components/InformeTabla.astro'
+import { registros, series, variaciones, destacados } from '../../data/inversion-simulada'
+
+<InformeEstilos />
+
+*Informe de demostración · Edición experimental · Todos los números son inventados para ilustrar el diseño editorial y no representan la economía dominicana ni ninguna otra economía real.*
+
+## La pregunta detrás de los datos
+
+Es frecuente encontrar dos series que avanzan en una dirección parecida y pensar que una explica el comportamiento de la otra. En economía, esto ocurre, por ejemplo, cuando se compara la inversión en infraestructura con la actividad productiva. Ambas variables pueden aumentar a lo largo del tiempo y, aun así, la relación observada no permite concluir cuánto del crecimiento fue causado por la inversión.
+
+Para explorar esa diferencia entre **describir una trayectoria** e **identificar un efecto**, construimos un ejercicio con tres indicadores hipotéticos: inversión pública, inversión privada y actividad económica. Las cifras se expresan como índices, tomando 2019 como año base igual a 100. Esto permite comparar la evolución relativa de variables con unidades originales distintas, sin sugerir que sus niveles monetarios son equivalentes.
+
+Los resultados iniciales, siempre dentro de este escenario inventado, son los siguientes:
+
+<InformeDestacados items={destacados} />
+
+Las tres cifras corresponden al cambio acumulado entre el inicio y el final del período. Ninguna debe interpretarse como una tasa anual de crecimiento ni como una estimación de impacto.
+
+## 1. Tres trayectorias, una misma escala
+
+La primera visualización revela una diferencia importante: aunque los tres indicadores terminan por encima de su nivel inicial, **no siguen exactamente la misma trayectoria**. El índice de inversión privada presenta la mayor expansión acumulada; el de inversión pública se mueve a un ritmo menor, mientras que la actividad económica se incrementa de manera más moderada.
+
+<InformeLinea titulo="Inversión y actividad: evolución comparada" subtitulo="Tres indicadores hipotéticos, expresados como índices con 2019 = 100" periodos={registros.map(d => d.periodo)} series={series} />
+
+Al final del ejercicio, la inversión privada alcanza un índice de 155 y la pública uno de 141; la actividad se sitúa en 124. En términos acumulados, esto equivale a expansiones del 55 %, 41 % y 24 %, respectivamente. Ese resultado sugiere que los indicadores no crecen a una velocidad idéntica y que las comparaciones de niveles requieren cautela.
+
+Un segundo detalle aparece cuando miramos la trayectoria intermedia. La caída hipotética de 2020 afecta a las tres series, pero en magnitudes diferentes. En escenarios reales, una perturbación común puede generar movimientos simultáneos que no tienen su origen en un vínculo directo entre inversión y actividad. Una tendencia compartida puede estar relacionada con precios, financiamiento, demanda externa, decisiones empresariales o condiciones institucionales.
+
+> Que dos indicadores aumenten juntos no significa que uno haya causado el crecimiento del otro.
+
+## 2. ¿Qué indicador creció más?
+
+La segunda visualización resume únicamente la diferencia entre el año inicial y el final. Es útil para comunicar el resultado en pocos segundos, pero también elimina la información sobre las fluctuaciones intermedias. Por eso, los gráficos de variaciones acumuladas deben leerse junto con las series temporales y no sustituirlas.
+
+<InformeBarras titulo="Variación acumulada entre 2019 y 2025" subtitulo="Cambio porcentual respecto al índice base: (índice final / 100 − 1) × 100" data={variaciones} />
+
+La inversión privada presenta la expansión más elevada del ejercicio. La distancia con el índice de actividad económica, sin embargo, no representa una “brecha de eficiencia” ni una estimación del retorno económico de esa inversión. Un índice de inversión puede aumentar por cambios en cantidades, precios o composición; la actividad depende de numerosos mecanismos y de horizontes temporales que no se observan en esta comparación simple.
+
+## 3. Los datos detrás de las visualizaciones
+
+Un informe orientado a la evidencia debe permitir que el lector vea los valores que sostienen sus figuras. La tabla siguiente reproduce los siete registros del ejercicio. **Ambos gráficos se construyen a partir del mismo archivo de datos** (`src/data/inversion-simulada.ts`), por lo que no es necesario volver a introducir manualmente las cifras en cada visualización.
+
+<InformeTabla registros={registros} />
+
+La tabla es también una herramienta para verificar afirmaciones: por ejemplo, permite comprobar que el índice de inversión privada pasa de 100 a 155 entre 2019 y 2025 y que la variación acumulada es, por construcción, del 55 %. En una publicación real, añadiríamos además los enlaces a las fuentes primarias, las unidades, las revisiones de la serie y el código de procesamiento.
+
+## 4. La diferencia entre correlación y causalidad
+
+Supongamos ahora que el ejercicio utilizara datos reales y encontrara una asociación positiva entre inversión y crecimiento. **Eso no demostraría por sí mismo un efecto causal.** Existen, como mínimo, tres problemas que habría que resolver antes de interpretar dicha asociación.
+
+- **Causalidad inversa:** una economía que crece más puede atraer inversión adicional, de modo que parte de la asociación funciona en la dirección opuesta a la hipótesis original.
+- **Variables omitidas:** condiciones financieras, educación, productividad, confianza, política fiscal y shocks externos pueden afectar simultáneamente tanto a la inversión como a la actividad.
+- **Rezagos y heterogeneidad:** una obra de infraestructura puede tener efectos diferentes según su calidad, localización, ejecución, utilización y el período transcurrido desde su puesta en servicio.
+
+Para investigar una hipótesis causal sería necesario formular un mecanismo, definir una unidad de análisis y construir una estrategia de identificación. Según el tipo de información disponible, podríamos considerar datos de panel, diferencias en diferencias, diseños cuasiexperimentales, instrumentos válidos o modelos dinámicos, siempre justificando los supuestos y las amenazas a la validez de cada enfoque.
+
+## 5. ¿Cómo lo convertiríamos en una investigación real?
+
+El siguiente paso sería sustituir los índices ficticios por series verificables, documentar su cobertura temporal y definir las variables con precisión. Por ejemplo, deberíamos distinguir entre inversión pública ejecutada y presupuestada, inversión privada agregada y gasto específico en infraestructura. También tendríamos que aclarar si trabajamos con valores corrientes, valores constantes o medidas físicas, evitando mezclar métricas incompatibles.
+
+Luego prepararíamos el procesamiento de datos con **Python** para generar tablas reproducibles. Una vez validado el análisis, exportaríamos resultados estructurados a la carpeta de datos del proyecto y los mostraríamos en las publicaciones mediante componentes de Astro. Esto separa tres tareas que conviene mantener independientes: recolección de evidencia, estimación estadística y comunicación de resultados.
+
+En una versión destinada a publicación incorporaríamos además un repositorio de datos o anexos reproducibles, una bibliografía, la fecha de extracción de cada fuente y una sección de limitaciones metodológicas. El flujo editorial tendría una revisión adicional para comprobar que los títulos, las cifras de las visualizaciones y las conclusiones corresponden exactamente a los resultados del análisis.
+
+## Conclusión
+
+Este ejemplo muestra la diferencia entre una **página web** y un **documento de investigación publicado en la web**. El informe tiene una narrativa, cifras destacadas, gráficos, tabla y discusión metodológica, pero cada pieza vive en un componente o archivo reutilizable. Podemos cambiar los datos sin redibujar las figuras o alterar el diseño de la página.
+
+La idea central del ejercicio es sencilla: las visualizaciones ayudan a descubrir patrones y a comunicar preguntas. La evidencia causal exige un paso adicional, con un diseño empírico que permita defender la interpretación de los resultados. Esa distinción forma parte de la propuesta editorial de Lighthouse D&A: **pensar con claridad antes de sacar conclusiones**.
+
+---
+
+**Nota metodológica y de transparencia.** Todo este informe es una simulación educativa creada para probar Astro y MDX. Los índices, los cambios y las interpretaciones descriptivas no deben citarse como estadísticas de República Dominicana ni de otro país. La definición, escala y secuencia de los datos se encuentran en `src/data/inversion-simulada.ts`.

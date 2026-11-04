@@ -1,0 +1,39 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+const {
+  title='Lighthouse D&A',
+  description='Ideas que iluminan. Análisis y publicaciones basadas en evidencia.',
+  active='inicio',
+  pageClass='',
+  search=false,
+  demo=false,
+} = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f9f6" />
+    <meta name="description" content={description} />
+    {demo && <meta name="robots" content="noindex,follow" />}
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class={pageClass}>
+    <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+    {pageClass==='article-page' && <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>}
+    <Header active={active} search={search} article={pageClass==='article-page'} />
+    <slot />
+    <Footer />
+    <script>
+      import '../scripts/site.js';
+      import '../scripts/search.js';
+    </script>
+  </body>
+</html>

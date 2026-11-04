@@ -1,0 +1,17 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { fechaPublicacion, rutaPublicacion } from '../lib/publicaciones';
+interface Props { post: CollectionEntry<'publicaciones'>; featured?: boolean; }
+const { post, featured = false } = Astro.props;
+---
+<article class:list={{ 'publication-card': !featured }}>
+  <a class={featured ? 'latest-post' : 'card-button'} href={rutaPublicacion(post.id)}>
+    <div class:list={{ 'latest-image-wrap': featured }}><img class:list={{ 'card-image': !featured }} src={post.data.cover} alt="" loading="lazy" /></div>
+    <div class={featured ? 'latest-content' : 'card-content'}>
+      <p class="category"><span></span> {post.data.category.toUpperCase()}</p>
+      <h3>{post.data.title}</h3>
+      <p class="card-summary">{post.data.description}</p>
+      <div class={featured ? 'latest-footer' : 'card-footer'}><span>{post.data.demo ? 'DEMOSTRACIÓN · DATOS SIMULADOS' : fechaPublicacion(post.data.publishedAt)} · {post.data.readingMinutes} MIN DE LECTURA</span><span class:list={{ 'latest-arrow': featured }} aria-hidden="true">→</span></div>
+    </div>
+  </a>
+</article>
