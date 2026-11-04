@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f9f6">
+  <meta name="description" content="Artículo de demostración de Lighthouse D&amp;A: el costo de la inacción climática en una economía hipotética. Con dos gráficos, tabla y metodología de datos simulados.">
+  <meta name="robots" content="noindex,follow">
+  <title>El costo de la inacción climática en América Latina | Lighthouse D&amp;A</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;family=DM+Serif+Display&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../publicacion.css">
+  <script src="../site.js" defer></script>
+  <script src="../graficos.js" defer></script>
+  <script src="../publicacion.js" defer></script>
+</head>
+<body class="article-page">
+  <a class="skip-link" href="#contenido">Saltar al artículo</a>
+  <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
+  <header class="site-header" id="inicio">
+    <div class="container header-inner">
+      <a href="../index.html" class="brand" aria-label="Lighthouse D&amp;A, volver al inicio"><img src="../assets/logo.svg" alt="" width="64" height="64"><span>Lighthouse <strong>D&amp;A</strong></span></a>
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a class="nav-link" href="../index.html">Inicio</a>
+        <a class="nav-link active" href="../paginas/publicaciones.html" aria-current="true">Publicaciones</a>
+        <a class="nav-link" href="../paginas/nosotros.html">Nosotros</a>
+        <a class="nav-link" href="../paginas/equipo.html">Equipo</a>
+        <a class="nav-link" href="../paginas/contacto.html">Contacto</a>
+      </nav>
+      <a class="article-header-back" href="../paginas/publicaciones.html" aria-label="Volver a las publicaciones">← <span>Publicaciones</span></a>
+      <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-navigation"><span></span><span></span><span></span></button>
+    </div>
+    <nav class="mobile-nav" id="mobile-navigation" aria-label="Menú móvil" hidden>
+        <a href="../index.html">Inicio</a>
+        <a href="../paginas/publicaciones.html" aria-current="true">Publicaciones</a>
+        <a href="../paginas/nosotros.html">Nosotros</a>
+        <a href="../paginas/equipo.html">Equipo</a>
+        <a href="../paginas/contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    <div class="article-hero">
+      <div class="article-container">
+        <nav class="breadcrumbs" aria-label="Ruta de navegación"><a href="../index.html">Inicio</a><span aria-hidden="true">/</span><a href="../paginas/publicaciones.html">Publicaciones</a><span aria-hidden="true">/</span><span>Medio ambiente</span></nav>
+        <div class="article-hero-grid">
+          <div class="article-hero-copy">
+            <p class="article-kicker"><span class="square"></span> EDICIÓN DE PRUEBA <span>/</span> MEDIO AMBIENTE</p>
+            <h1>El costo de la <em>inacción climática</em> en América Latina<span class="green-period">.</span></h1>
+            <p class="article-deck">¿Cuánto puede costar esperar? Un ejercicio de escenarios para entender cómo se acumulan las pérdidas y por qué la adaptación es también una decisión económica.</p>
+            <div class="article-meta">
+              <div class="author-avatar" aria-hidden="true">L</div>
+              <div class="author-info"><strong>Equipo Lighthouse D&amp;A</strong><span>Publicación de demostración · 11 min de lectura</span></div>
+              <button type="button" hidden class="share-button" id="share-button" aria-label="Copiar enlace de esta publicación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M16 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></svg> Copiar enlace</button>
+            </div>
+            <p class="share-feedback" id="share-feedback" role="status" aria-live="polite"></p>
+          </div>
+          <aside class="article-signal" aria-label="Resumen visual del ejercicio">
+            <span class="signal-overline"><span class="signal-dot"></span> LIGHTHOUSE / ESTUDIO 001</span>
+            <div class="signal-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="signal-value">0,73 <small>pp</small></div>
+            <div class="signal-title">Brecha hipotética de pérdidas en 2033</div>
+            <p>Entre un escenario sin adaptación y otro con medidas de respuesta.</p>
+            <div class="signal-foot">DATOS SIMULADOS <span aria-hidden="true">↗</span></div>
+          </aside>
+        </div>
+        <div class="article-trust"><span class="trust-badge">EJERCICIO EDITORIAL</span> <span>Los datos y escenarios de esta publicación son completamente ficticios. No representan estimaciones para ningún país.</span></div>
+      </div>
+    </div>
+
+    <div class="article-container article-layout">
+      <aside class="article-sidebar" aria-label="Navegación del artículo">
+        <details class="toc" open><summary class="toc-label">En este artículo</summary><nav aria-label="Tabla de contenidos"><a href="#pregunta" class="toc-active">Introducción</a><a href="#trayectoria">01 · La trayectoria</a><a href="#sectores">02 · La composición</a><a href="#tabla">03 · Los números</a><a href="#interpretacion">04 · Interpretación</a><a href="#decisiones">05 · Decisiones</a><a href="#metodologia">06 · Metodología</a></nav><div class="toc-foot"><div class="toc-foot-square"></div><span>CLARIDAD A TRAVÉS<br>DE LA EVIDENCIA</span></div></details>
+      </aside>
+      <article class="article-body" id="articulo">
+        <section id="pregunta" class="story-section">
+          <p class="opening-paragraph">Una decisión puede ser costosa incluso cuando parece que no cuesta nada. Postergar una obra de drenaje, aplazar el mantenimiento de una carretera o esperar para mejorar un sistema de alerta temprana no produce necesariamente una factura inmediata. Sin embargo, la exposición al riesgo permanece, y cada año de demora puede modificar el tamaño de una pérdida futura.</p>
+          <p>Ese es uno de los desafíos para analizar económicamente la adaptación al cambio climático: sus beneficios no siempre aparecen como ingresos nuevos, sino como daños que <strong>no llegan a ocurrir</strong>. La ausencia de una inundación grave o de una interrupción prolongada de la actividad productiva rara vez se registra en una cuenta presupuestaria. Pero puede tener un valor económico importante.</p>
+          <p>En esta publicación construimos un ejemplo deliberadamente ficticio para explorar el problema. No pretendemos estimar el costo real del cambio climático en América Latina. Nuestro objetivo es mostrar cómo podría presentarse un análisis de escenarios, cómo se leerían sus gráficos y qué preguntas deberían hacerse antes de convertir un resultado en una recomendación de política.</p>
+          <div class="editorial-note"><span class="editorial-note-icon">i</span><div><strong>Antes de leer las cifras</strong><p>Todos los porcentajes, sectores y trayectorias que siguen son <b>datos simulados para diseñar la página web</b>. No proceden de organismos estadísticos, estudios climáticos ni modelos validados.</p></div></div>
+        </section>
+
+        <section id="trayectoria" class="story-section">
+          <noscript><p class="editorial-note">Los gráficos y las descargas CSV necesitan JavaScript. Puedes consultar el desglose sectorial en la <a href="#tabla">tabla de datos</a>.</p></noscript>
+          <div class="section-marker">01 / LA TRAYECTORIA</div>
+          <h2>El costo de esperar no tiene por qué crecer de manera lineal</h2>
+          <p>Imaginemos una economía que inicia 2026 con pérdidas climáticas anuales esperadas equivalentes al 0,80 % de su producto interno bruto. En el primer escenario no se incorporan nuevas medidas de adaptación; en el segundo se realizan inversiones graduales que reducen parcialmente la vulnerabilidad de hogares, infraestructura y sectores productivos.</p>
+          <p>Ambas trayectorias parten de un mismo punto. Lo que cambia es la respuesta al riesgo. Para hacer visible esa diferencia, expresamos las pérdidas esperadas de cada año como porcentaje del PIB hipotético. El resultado es una brecha que empieza siendo pequeña y se amplía a medida que transcurre el tiempo.</p>
+          <figure class="data-figure" id="grafico-evolucion">
+            <div class="figure-head"><div><span class="figure-label">GRÁFICO 01 <span>/</span> EVOLUCIÓN</span><h3>Pérdidas climáticas anuales esperadas</h3><p>Porcentaje del PIB hipotético, 2026–2033</p></div><button class="data-download" type="button" hidden data-download="evolucion">Descargar CSV ↓</button></div>
+            <div class="figure-legend"><span><i class="legend-line legend-dark"></i> Sin nuevas medidas</span><span><i class="legend-line legend-green"></i> Con adaptación</span></div>
+            <div class="chart-container" id="chart-evolucion" tabindex="0" role="img" aria-label="Gráfico de líneas. En 2026 ambos escenarios tienen pérdidas esperadas de 0,80 por ciento del PIB. En 2033, el escenario sin adaptación alcanza 2,25 por ciento y el escenario con adaptación 1,52 por ciento."></div>
+            <figcaption><strong>Lectura:</strong> en el ejemplo simulado, las pérdidas esperadas en 2033 son 0,73 puntos porcentuales del PIB menores en el escenario con adaptación. <span>Fuente: elaboración ficticia de Lighthouse D&amp;A para pruebas de diseño.</span></figcaption>
+          </figure>
+          <p>La distancia entre las líneas no representa dinero ya recuperado ni ahorro presupuestario automático. Es una diferencia <em>esperada</em> entre escenarios definidos por supuestos. Para hablar de beneficios netos habría que incorporar el costo de las medidas de adaptación, sus gastos de operación, el período de ejecución y el valor temporal del dinero.</p>
+          <p>También tendríamos que modelar la incertidumbre: no sabemos con precisión cuándo ocurrirá un evento extremo, cuántas personas afectará o qué activos resultarán dañados. Un análisis sólido no se limita a ofrecer una sola línea de pronóstico, sino que examina rangos, probabilidades y la sensibilidad de sus resultados a distintas hipótesis.</p>
+        </section>
+
+        <blockquote class="story-quote"><span aria-hidden="true">“</span><p>La adaptación no siempre genera un ingreso nuevo. Muchas veces su principal beneficio es evitar una pérdida que, de otro modo, habría ocurrido.</p><cite>Una idea central para interpretar el ejercicio</cite></blockquote>
+
+        <section id="sectores" class="story-section">
+          <div class="section-marker">02 / LA COMPOSICIÓN</div>
+          <h2>Dos economías pueden perder lo mismo, pero no sufrir lo mismo</h2>
+          <p>Un promedio agregado es útil para dimensionar el problema, aunque por sí solo dice poco sobre quién soporta el costo. Dos países podrían registrar la misma pérdida esperada como porcentaje del PIB y, sin embargo, experimentar consecuencias sociales muy diferentes. Si el daño se concentra en hogares de bajos ingresos, en vías de acceso a servicios esenciales o en producción de alimentos, sus efectos indirectos podrían ser particularmente elevados.</p>
+          <p>Para ilustrarlo, dividimos las pérdidas del año final entre cinco grupos: agricultura, infraestructura, salud, turismo y otros sectores. Distribuimos las cifras de forma que su suma coincida exactamente con las trayectorias agregadas del primer gráfico. Esta consistencia es importante: un lector debe poder conectar lo que ve en una figura con lo que encuentra en otra.</p>
+          <figure class="data-figure" id="grafico-sectores">
+            <div class="figure-head"><div><span class="figure-label">GRÁFICO 02 <span>/</span> DISTRIBUCIÓN</span><h3>¿Dónde se concentra la pérdida esperada?</h3><p>Año 2033 · Contribución de cada sector, puntos porcentuales del PIB</p></div><button class="data-download" type="button" hidden data-download="sectores">Descargar CSV ↓</button></div>
+            <div class="figure-legend"><span><i class="legend-box legend-dark"></i> Sin nuevas medidas</span><span><i class="legend-box legend-green"></i> Con adaptación</span></div>
+            <div class="chart-container chart-container--bars" id="chart-sectores" tabindex="0" role="img" aria-label="Gráfico de barras horizontales comparando pérdidas esperadas por sector en 2033. Las pérdidas sin adaptación son mayores en todos los sectores del ejercicio hipotético."></div>
+            <figcaption><strong>Lectura:</strong> infraestructura y agricultura concentran buena parte de la pérdida del escenario simulado sin medidas nuevas. <span>Fuente: datos completamente inventados para esta demostración.</span></figcaption>
+          </figure>
+          <p>El gráfico sirve para identificar una composición posible, no para afirmar que estos sectores tengan ese nivel de exposición en la región. En una investigación real, la desagregación sectorial necesitaría incorporar información sobre ubicación geográfica, activos en riesgo, importancia relativa de cada actividad, grado de exposición y capacidad de recuperación.</p>
+        </section>
+
+        <section id="tabla" class="story-section">
+          <div class="section-marker">03 / EL DETALLE</div>
+          <h2>Los números detrás de la visualización</h2>
+          <p>Una buena visualización resume; una buena tabla permite comprobar. Aquí mostramos las mismas cifras que alimentan el segundo gráfico, junto con la diferencia entre los escenarios. Todas las cantidades están expresadas en puntos porcentuales del PIB de nuestra economía ficticia. Las sumas cierran con el resultado agregado de 2033.</p>
+          <div class="table-figure" aria-label="Tabla de pérdidas climáticas simuladas por sector">
+            <div class="figure-head"><div><span class="figure-label">TABLA 01 <span>/</span> DESGLOSE</span><h3>Pérdidas anuales esperadas por sector, 2033</h3><p>Puntos porcentuales del PIB hipotético</p></div><button class="data-download" type="button" hidden data-download="sectores">Descargar CSV ↓</button></div>
+            <div class="table-scroll" tabindex="0" role="region" aria-label="Tabla desplazable horizontalmente en pantallas pequeñas">
+              <table>
+                <caption class="visually-hidden">Pérdidas simuladas por sector en 2033, en puntos porcentuales del PIB hipotético.</caption>
+                <thead><tr><th scope="col">Sector</th><th scope="col">Sin medidas</th><th scope="col">Con adaptación</th><th scope="col">Diferencia</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Agricultura</th><td>0,61</td><td>0,43</td><td class="difference">−0,18</td></tr>
+                  <tr><th scope="row">Infraestructura</th><td>0,58</td><td>0,37</td><td class="difference">−0,21</td></tr>
+                  <tr><th scope="row">Salud</th><td>0,47</td><td>0,34</td><td class="difference">−0,13</td></tr>
+                  <tr><th scope="row">Turismo</th><td>0,34</td><td>0,22</td><td class="difference">−0,12</td></tr>
+                  <tr><th scope="row">Otros sectores</th><td>0,25</td><td>0,16</td><td class="difference">−0,09</td></tr>
+                </tbody>
+                <tfoot><tr><th scope="row">Total</th><td>2,25</td><td>1,52</td><td class="difference">−0,73</td></tr></tfoot>
+              </table>
+            </div>
+            <p class="table-source">Fuente: simulación editorial. Diferencia = escenario con adaptación menos escenario sin nuevas medidas.</p>
+          </div>
+          <p>Conviene fijarse en qué representa exactamente cada columna. Por ejemplo, la diferencia de −0,21 puntos para infraestructura no significa que una obra específica produzca ese beneficio. Solo indica cuánto menor hemos supuesto que sería la pérdida sectorial dentro del segundo escenario.</p>
+          <p>Al publicar datos reales, esta tabla debería permitir que otra persona reconstruya el gráfico, revise las unidades y, si existe una fuente pública, descargue la base original. La reproducibilidad no es un adorno técnico: es parte de la confianza que una publicación construye con sus lectores.</p>
+        </section>
+
+        <section id="interpretacion" class="story-section">
+          <div class="section-marker">04 / INTERPRETACIÓN</div>
+          <h2>¿Qué podemos concluir y qué todavía no?</h2>
+          <p>El ejercicio sugiere una intuición razonable: actuar a tiempo <em>podría</em> reducir ciertas pérdidas asociadas a fenómenos climáticos. Pero los valores escogidos no son evidencia de que una política determinada haya funcionado. De hecho, en este ejemplo hemos definido las trayectorias de antemano. La brecha surge de nuestros supuestos y no de una medición independiente.</p>
+          <p>Hay al menos tres preguntas que una investigación real necesitaría resolver antes de recomendar inversiones. La primera es <strong>efectividad</strong>: ¿en qué medida una intervención reduce realmente la vulnerabilidad? La segunda es <strong>costo</strong>: ¿cuánto cuesta instalarla, operarla y mantenerla? La tercera es <strong>distribución</strong>: ¿quién recibe los beneficios y quién financia la intervención?</p>
+          <p>La evaluación causal también importa. Si una comunidad mejora sus resultados después de construir una infraestructura de protección, no podemos atribuir toda esa mejora a la obra sin considerar otras explicaciones: cambios en la actividad económica, variaciones en la frecuencia de eventos, migración, otras inversiones públicas o condiciones iniciales diferentes.</p>
+          <p>Cuando es viable, podemos comparar localidades similares, explotar variaciones en la implementación de las políticas, utilizar diseños cuasiexperimentales o trabajar con modelos estructurales explícitos. Cada estrategia tiene supuestos, límites y posibles sesgos. Una estimación útil no es simplemente la que arroja un número preciso; es la que explica con claridad de dónde viene ese número.</p>
+        </section>
+
+        <section id="decisiones" class="story-section">
+          <div class="section-marker">05 / DECISIONES</div>
+          <h2>De los datos a una agenda de preguntas mejores</h2>
+          <p>Cuando una administración tiene recursos limitados, la cuestión relevante no es decidir entre adaptarse o no adaptarse en abstracto. Es elegir entre intervenciones posibles, comparar sus beneficios y costos, y reconocer que algunas decisiones pueden ser más urgentes que otras. Una solución de drenaje en un área densamente poblada, por ejemplo, puede tener un perfil de beneficios distinto al de una obra de protección costera o un sistema de vigilancia epidemiológica.</p>
+          <p>La priorización debería considerar el valor esperado de las pérdidas evitadas, pero también la población expuesta, la irreversibilidad de ciertos daños, los efectos sobre servicios esenciales y la existencia de alternativas más baratas. Donde la incertidumbre sea elevada, pueden resultar preferibles acciones flexibles o inversiones escalonadas que permitan aprender a medida que aparece nueva información.</p>
+          <p>La calidad de los datos disponibles condicionará todo ese proceso. Sin inventarios confiables de infraestructura, información territorial, registros administrativos y series consistentes de daños, cualquier modelo tendrá limitaciones significativas. Por eso, invertir en medición, interoperabilidad y capacidad analítica también forma parte de una estrategia económica de resiliencia.</p>
+          <div class="closing-thought"><span>IDEA PARA LLEVAR</span><p>Una buena decisión pública no exige conocer el futuro con certeza. Exige entender qué sabemos, qué suponemos y cuánto podría costar equivocarnos.</p></div>
+        </section>
+
+        <section id="metodologia" class="story-section methodology">
+          <div class="section-marker">06 / TRANSPARENCIA</div>
+          <h2>Datos y notas metodológicas</h2>
+          <p>Este artículo es una maqueta funcional de Lighthouse D&amp;A. Su propósito es probar la experiencia de lectura, la presentación de visualizaciones y el espacio necesario para explicaciones extensas, no comunicar hallazgos de investigación. La economía, los años futuros, las pérdidas, las intervenciones y los resultados son hipotéticos.</p>
+          <div class="method-list">
+            <div><strong>Unidad de medida</strong><p>Pérdidas anuales esperadas en puntos porcentuales del PIB hipotético. No son costos acumulados ni observaciones históricas.</p></div>
+            <div><strong>Escenarios</strong><p>Se comparan dos trayectorias sintéticas de 2026 a 2033: sin nuevas medidas de adaptación y con medidas graduales.</p></div>
+            <div><strong>Consistencia</strong><p>La suma de las categorías sectoriales reproduce exactamente el valor del año 2033 en cada una de las dos líneas del primer gráfico.</p></div>
+            <div><strong>Limitaciones</strong><p>No hay calibración empírica, intervalos de confianza, costos de intervención, descuento temporal ni estimación causal. No deben citarse estas cifras como evidencia regional.</p></div>
+          </div>
+        </section>
+        <div class="article-ending"><span class="end-symbol">✳</span><p>Observar. Analizar. Entender.</p><a href="../paginas/publicaciones.html">← Volver a las publicaciones</a></div>
+      </article>
+
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="footer-brand" href="../index.html" aria-label="Lighthouse D&amp;A, ir a Inicio"><img src="../assets/logo.svg" alt="" width="41" height="41"><span><strong>Lighthouse D&amp;A</strong><span>Ideas que iluminan.</span></span></a>
+      <nav class="footer-nav" aria-label="Navegación del pie de página"><a href="../index.html">Inicio</a><a href="../paginas/publicaciones.html">Publicaciones</a><a href="../paginas/nosotros.html">Nosotros</a><a href="../paginas/equipo.html">Equipo</a><a href="../paginas/contacto.html">Contacto</a></nav>
+      <small>© <span id="current-year">2026</span> Lighthouse D&amp;A</small>
+    </div>
+  </footer>
+</body>
+</html>

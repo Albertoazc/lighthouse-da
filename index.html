@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f9f6">
+  <meta name="description" content="Lighthouse D&amp;A: ideas que iluminan. Un espacio independiente para explorar economía, sociedad y evidencia con claridad.">
+  <meta property="og:title" content="Lighthouse D&amp;A — Más claridad para mejores decisiones">
+  <meta property="og:description" content="Observar. Analizar. Entender. Ideas que iluminan la conversación.">
+  <title>Lighthouse D&amp;A | Más claridad para mejores decisiones</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;family=DM+Serif+Display&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+  <header class="site-header" id="inicio">
+    <div class="container header-inner">
+      <a href="index.html" class="brand" aria-label="Lighthouse D&amp;A, ir a Inicio">
+        <img src="assets/logo.svg" alt="" width="64" height="64">
+        <span>Lighthouse <strong>D&amp;A</strong></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a class="nav-link active" href="index.html" aria-current="page">Inicio</a>
+        <a class="nav-link" href="paginas/publicaciones.html">Publicaciones</a>
+        <a class="nav-link" href="paginas/nosotros.html">Nosotros</a>
+        <a class="nav-link" href="paginas/equipo.html">Equipo</a>
+        <a class="nav-link" href="paginas/contacto.html">Contacto</a>
+      </nav>
+      <button class="search-toggle" type="button" aria-label="Buscar en las publicaciones" title="Buscar publicaciones" aria-expanded="false" aria-controls="search-panel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg>
+      </button>
+      <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-navigation"><span></span><span></span><span></span></button>
+    </div>
+    <div class="search-panel" id="search-panel" hidden>
+      <div class="container search-panel-inner">
+        <label for="site-search">Buscar entre las publicaciones de muestra</label>
+        <div class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg><input type="search" id="site-search" placeholder="Prueba con economía, tecnología, clima..." autocomplete="off"><button type="button" id="clear-search" aria-label="Limpiar búsqueda">×</button></div>
+        <div class="search-results" id="search-results" aria-live="polite"></div>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobile-navigation" aria-label="Menú móvil" hidden>
+        <a href="index.html" aria-current="page">Inicio</a>
+        <a href="paginas/publicaciones.html">Publicaciones</a>
+        <a href="paginas/nosotros.html">Nosotros</a>
+        <a href="paginas/equipo.html">Equipo</a>
+        <a href="paginas/contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-visual" aria-hidden="true"><img src="assets/hero-art.webp" width="1448" height="1086" alt="" fetchpriority="high" decoding="async"></div>
+      <div class="container hero-layout">
+        <div class="hero-copy" id="nosotros">
+          <p class="eyebrow"><span class="square" aria-hidden="true"></span> DATOS <span>/</span> ANÁLISIS <span>/</span> EVIDENCIA</p>
+          <h1 id="hero-title">Más claridad<br>para mejores<br>decisiones<span class="green-period">.</span></h1>
+          <p class="hero-description">Lighthouse D&amp;A es un espacio independiente de análisis, visualización y narrativa de datos. Exploramos temas económicos y sociales con rigor, para aportar evidencia que ilumine la conversación.</p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="paginas/publicaciones.html">Explorar publicaciones <span aria-hidden="true">→</span></a>
+            <a class="link-secondary" href="paginas/nosotros.html">Conoce más<br>sobre el proyecto <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="hero-attributes" aria-label="Nuestros principios">
+            <span class="small-rule" aria-hidden="true"></span>
+            <div class="attributes-row">
+              <div class="attribute"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M3 31h30M8 28V19h5v9m6 0V13h5v15m6 0V5h5v23"/></svg><span>ANALIZAR<br>CON RIGOR</span></div>
+              <div class="attribute"><svg viewBox="0 0 36 36" aria-hidden="true"><rect x="7" y="4" width="23" height="29" rx="1"/><path d="M12 11h13M12 16h13M12 21h13M12 26h9"/></svg><span>COMUNICAR<br>CON CLARIDAD</span></div>
+              <div class="attribute"><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="10" r="5"/><path d="M8 30v-5c0-6 4-9 10-9s10 3 10 9v5M5 30H2v-5c0-5 2-8 6-9m20 0c4 1 6 4 6 9v5h-3"/></svg><span>APORTAR<br>AL DEBATE</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="publications" id="publicaciones" aria-labelledby="publications-heading">
+      <div class="container">
+        <div class="section-header"><h2 id="publications-heading">Publicaciones en preparación</h2><a class="section-link" href="#ultimo-post">Ver demostración <span aria-hidden="true">→</span></a></div>
+        <p class="sample-note"><span class="sample-dot" aria-hidden="true"></span> Contenido de muestra para visualizar el diseño. Estos artículos todavía no han sido publicados.</p>
+        <div class="publication-grid">
+          <article class="publication-card" data-article="productividad">
+            <a class="card-button" href="publicaciones/productividad.html" aria-label="Leer vista previa: Productividad en América Latina">
+              <img class="card-image" src="assets/thumb-economia.webp" alt="Ilustración de barras y una tendencia ascendente" width="410" height="252" loading="lazy" decoding="async">
+              <div class="card-content"><p class="category"><span></span> ECONOMÍA</p><h3>Productividad en América Latina: tendencias y desafíos para la próxima década</h3><p class="card-summary">Un análisis de las brechas de productividad, sus determinantes y las oportunidades para un crecimiento más inclusivo.</p><div class="card-footer"><span>ARTÍCULO DE MUESTRA</span><span aria-hidden="true">→</span></div></div>
+            </a>
+          </article>
+          <article class="publication-card" data-article="instituciones">
+            <a class="card-button" href="publicaciones/instituciones.html" aria-label="Leer vista previa: Confianza en las instituciones">
+              <img class="card-image" src="assets/thumb-sociedad.webp" alt="Ilustración de personas y círculos" width="410" height="252" loading="lazy" decoding="async">
+              <div class="card-content"><p class="category"><span></span> SOCIEDAD</p><h3>Confianza en las instituciones: ¿qué dicen los datos?</h3><p class="card-summary">Exploramos la confianza ciudadana en América Latina y los factores que la explican a partir de encuestas.</p><div class="card-footer"><span>ARTÍCULO DE MUESTRA</span><span aria-hidden="true">→</span></div></div>
+            </a>
+          </article>
+          <article class="publication-card" data-article="energia">
+            <a class="card-button" href="publicaciones/energia.html" data-search-terms="energía renovables" aria-label="Leer vista previa: Transición energética en la región">
+              <img class="card-image" src="assets/thumb-ambiente.webp" alt="Ilustración de montañas, un lago y el sol" width="410" height="252" loading="lazy" decoding="async">
+              <div class="card-content"><p class="category"><span></span> MEDIO AMBIENTE</p><h3>Transición energética en la región: avances, retos y oportunidades</h3><p class="card-summary">Un repaso de los datos clave sobre las energías limpias y su impacto en el desarrollo sostenible.</p><div class="card-footer"><span>ARTÍCULO DE MUESTRA</span><span aria-hidden="true">→</span></div></div>
+            </a>
+          </article>
+          <article class="publication-card" data-article="infancia">
+            <a class="card-button" href="publicaciones/infancia.html" aria-label="Leer vista previa: Políticas de primera infancia">
+              <img class="card-image" src="assets/thumb-politicas.webp" alt="Ilustración de un edificio institucional" width="410" height="252" loading="lazy" decoding="async">
+              <div class="card-content"><p class="category"><span></span> POLÍTICAS PÚBLICAS</p><h3>¿Qué funciona en políticas de primera infancia?</h3><p class="card-summary">Revisamos la evidencia sobre programas efectivos para el desarrollo infantil temprano.</p><div class="card-footer"><span>ARTÍCULO DE MUESTRA</span><span aria-hidden="true">→</span></div></div>
+            </a>
+          </article>
+          <article class="publication-card" data-article="inteligencia">
+            <a class="card-button" href="publicaciones/inteligencia.html" data-search-terms="ia automatización" aria-label="Leer vista previa: Inteligencia artificial en el sector público">
+              <img class="card-image" src="assets/thumb-tecnologia.webp" alt="Ilustración de una red de nodos conectados" width="410" height="252" loading="lazy" decoding="async">
+              <div class="card-content"><p class="category"><span></span> TECNOLOGÍA</p><h3>Inteligencia artificial en el sector público: posibilidades y límites</h3><p class="card-summary">Un análisis de casos de uso, riesgos y recomendaciones para una adopción responsable.</p><div class="card-footer"><span>ARTÍCULO DE MUESTRA</span><span aria-hidden="true">→</span></div></div>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="latest-section" id="ultimo-post" aria-labelledby="latest-heading">
+      <div class="container">
+        <div class="section-header"><h2 id="latest-heading">Artículo de demostración</h2><a class="section-link" href="paginas/publicaciones.html#archivo">Ver publicaciones en preparación <span aria-hidden="true">→</span></a></div>
+        <a class="latest-post" href="publicaciones/inaccion-climatica.html" data-search-terms="clima calentamiento" aria-label="Leer demostración: El costo de la inacción climática en América Latina">
+          <div class="latest-image-wrap"><img src="assets/feature-clima.webp" alt="Ilustración de montañas verdes, un bosque y un río" width="461" height="188" loading="lazy" decoding="async"></div>
+          <div class="latest-content"><p class="category"><span></span> MEDIO AMBIENTE</p><h3>El costo de la inacción climática en América Latina</h3><p>Un ejercicio con datos simulados para explorar la lectura de un análisis económico. Incluye dos gráficos, una tabla descargable y notas metodológicas; no presenta estimaciones reales para la región.</p><div class="latest-footer"><span>PUBLICACIÓN DE MUESTRA <i>·</i> 11 MIN DE LECTURA</span><span class="latest-arrow" aria-hidden="true">→</span></div></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="about-band" id="sobre-el-proyecto" aria-labelledby="about-heading">
+      <div class="container about-inner">
+        <div><p class="eyebrow"><span class="square"></span> SOBRE LIGHTHOUSE D&amp;A</p><h2 id="about-heading">Ideas que iluminan<span class="green-period">.</span></h2></div>
+        <div><p>Creemos que las buenas preguntas, el pensamiento crítico y la evidencia ayudan a comprender mejor nuestro entorno. Este es un espacio para explorar esas preguntas con libertad, rigor y claridad.</p><a class="section-link about-link" href="paginas/nosotros.html">Conoce nuestra forma de trabajar <span aria-hidden="true">→</span></a></div>
+      </div>
+    </section>
+    <section class="closing-area" id="equipo" aria-label="Equipo y contacto">
+      <div class="container closing-inner"><div><span class="footer-overline">EL PROYECTO</span><h2>Seguimos construyendo.</h2><p>Próximamente conocerás al equipo y nuestras primeras publicaciones.</p></div><a href="paginas/equipo.html" class="back-top">Conocer al equipo <span aria-hidden="true">→</span></a></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="footer-brand" href="index.html" aria-label="Lighthouse D&amp;A, ir a Inicio"><img src="assets/logo.svg" alt="" width="41" height="41"><span><strong>Lighthouse D&amp;A</strong><span>Ideas que iluminan.</span></span></a>
+      <nav class="footer-nav" aria-label="Navegación del pie de página"><a href="index.html">Inicio</a><a href="paginas/publicaciones.html">Publicaciones</a><a href="paginas/nosotros.html">Nosotros</a><a href="paginas/equipo.html">Equipo</a><a href="paginas/contacto.html">Contacto</a></nav>
+      <small>© <span id="current-year">2026</span> Lighthouse D&amp;A</small>
+    </div>
+  </footer>
+</body>
+</html>
