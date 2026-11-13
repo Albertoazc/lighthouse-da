@@ -23,7 +23,8 @@ npm run build    # Diagnósticos y compilación de producción
 npm run preview  # Servir dist/ para revisar la versión de producción
 npm run test:site # Comprobar rutas, enlaces, recomendaciones, borradores, RSS y sitemap sobre dist/
 npm run test:unit # Probar el algoritmo de recomendaciones
-npm run check:graficos # Validar formato y tamaño de los gráficos (también se ejecuta en build)
+npm run check:graficos # Validar gráficos, interactivos y datos descargables (también se ejecuta en build)
+npm run check:enlaces  # Comprobar enlaces externos de informes y autores (requiere conexión)
 npm run nuevo -- mi-informe  # Crear un informe en borrador a partir de la plantilla
 ```
 
@@ -44,6 +45,10 @@ SITE_URL=https://www.tudominio.org npm run build
 ```
 
 Sin `SITE_URL` se usa `https://lighthouse-da.example` (dominio reservado, solo para desarrollo).
+
+### Kit de gráficos
+
+Los gráficos se generan con Python desde `analisis/` (matplotlib y Plotly) con el formato exigido por la plantilla. Ver [analisis/README.md](analisis/README.md).
 
 ## Rutas
 

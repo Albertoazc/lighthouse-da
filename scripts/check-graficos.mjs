@@ -72,6 +72,21 @@ if (existsSync(rootHtml)) {
   }
 }
 
+// Datos descargables (opcional): public/datos/<informe>/archivo.(csv|xlsx|json|zip).
+const rootDatos = resolve('public/datos');
+if (existsSync(rootDatos)) {
+  for (const entrada of readdirSync(rootDatos)) {
+    const dir = resolve(rootDatos, entrada);
+    if (!statSync(dir).isDirectory()) { errores.push(`${rel(dir)}: los datos van en public/datos/<informe>/archivo.csv.`); continue; }
+    if (!informes.has(entrada)) errores.push(`${rel(dir)}: no existe src/content/publicaciones/${entrada}.md. La subcarpeta debe llamarse igual que el informe.`);
+    for (const archivo of readdirSync(dir)) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*\.(csv|xlsx|json|zip)$/.test(archivo)) {
+        errores.push(`${rel(resolve(dir, archivo))}: usa .csv, .xlsx, .json o .zip y un nombre en minúsculas con guiones.`);
+      }
+    }
+  }
+}
+
 // Las imágenes insertadas con Markdown deben tener texto alternativo (se ignoran los bloques de código).
 for (const archivo of readdirSync(contenido).filter(f => f.endsWith('.md'))) {
   const texto = readFileSync(resolve(contenido, archivo), 'utf8').replace(/^(`{3,}|~{3,})[\s\S]*?^\1/gm, '');

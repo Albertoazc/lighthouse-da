@@ -84,6 +84,7 @@ export function rehypeGraficos() {
             el('iframe', { src, title: `Gráfico ${numero}: ${tituloTexto}`, loading: 'lazy', sandbox: 'allow-scripts', referrerPolicy: 'no-referrer', ariaDescribedBy: descripcionId }, []),
           ]),
           el('p', { id: descripcionId, className: ['visually-hidden'] }, [txt(alt)]),
+          el('p', { className: ['grafico__impresion'] }, [txt(`Gráfico interactivo: consúltalo en la versión web de este informe. ${alt}`)]),
           el('p', { className: ['grafico__fuente'] }, [
             txt(fuente),
             ...(nota ? [el('span', { className: ['grafico__nota'] }, [txt(`Nota: ${nota}`)])] : []),

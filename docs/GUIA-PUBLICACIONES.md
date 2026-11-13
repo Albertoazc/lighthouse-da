@@ -138,7 +138,16 @@ La ruta empieza con `/interactivos/` (sin `../../`). El gráfico se muestra en u
 fig.write_html("public/interactivos/mi-informe/indicadores.html", include_plotlyjs=True, full_html=True)
 ```
 
-### 3.3 Validación automática
+### 3.3 Kit de gráficos
+
+La forma recomendada de producir los gráficos es el kit de `analisis/` (ver [analisis/README.md](../analisis/README.md)). Cada informe tiene allí sus datos y un script; al ejecutarlo se generan los PNG, los HTML interactivos y, si se desea, el CSV descargable, ya con el formato, los colores y la carpeta correctos:
+
+```sh
+python -m pip install -r analisis/requirements.txt   # una vez
+python analisis/informes/mi-informe/graficos.py
+```
+
+### 3.4 Validación automática
 
 `npm run build` (o solo `npm run check:graficos`) **se detiene con un mensaje claro** si un PNG no mide 1600 × 900, si un archivo está en otra carpeta o tiene otro formato, si un interactivo carga recursos externos o supera el peso máximo, o si un gráfico no tiene descripción, título `"Gráfico N. …"` o línea de fuente. La especificación vive en `src/config/sitio.ts` (`graficos` e `interactivos`).
 
@@ -165,6 +174,17 @@ fig.write_html("public/interactivos/mi-informe/indicadores.html", include_plotly
 ```
 
 Toda imagen necesita texto alternativo: la compilación rechaza `![](ruta)`.
+
+### 4.1 Datos descargables (opcional)
+
+Para ofrecer los datos al lector, guarda el archivo en `public/datos/<nombre-del-informe>/` (`.csv`, `.xlsx`, `.json` o `.zip`) y decláralo en los metadatos. La plantilla añade una sección «Datos» con enlace, formato y tamaño:
+
+```yaml
+datasets:
+  - label: "Indicadores trimestrales"
+    file: /datos/mi-informe/indicadores.csv
+    description: "Descripción breve (opcional)."
+```
 
 ## 5. Recomendaciones automáticas
 
@@ -217,6 +237,9 @@ El `id` es el valor de `category` y forma la URL `/paginas/publicaciones/categor
 - `npm run build` (gráficos, tipos, esquema y compilación), `npm run test:site` (rutas, enlaces, recomendaciones, borradores, RSS, sitemap) y `npm run test:unit` (algoritmo de recomendaciones).
 - `npm run preview` para revisar la versión de producción en escritorio y móvil.
 - Revisa que las cifras del texto coincidan con figuras y tablas, que las fuentes estén citadas y que `demo` sea correcto.
+- `npm run check:enlaces` comprueba que los enlaces externos (fuentes y referencias) respondan. También se ejecuta cada lunes en GitHub Actions.
+- Al final de cada informe la plantilla genera **«Cómo citar este informe»** (APA 7 y BibTeX) a partir del título, el autor y la fecha. Para personas, añade `citationName: "Apellido, N."` en su archivo de autor.
+- El botón **«Imprimir / PDF»** del encabezado produce una versión limpia en A4: sin menús ni columnas laterales, con la URL del informe, las fuentes de los enlaces y la cita.
 
 ## Preparado para un CMS
 

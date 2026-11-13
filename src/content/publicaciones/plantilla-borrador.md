@@ -24,6 +24,9 @@ featured: false                       # true para destacarlo en la portada
 # relatedReports: ["inversion-y-crecimiento-demo"]
 # seoTitle: "Título alternativo para buscadores"
 # seoDescription: "Descripción alternativa para buscadores."
+# datasets:                          # datos descargables (opcional), en public/datos/<informe>/
+#   - label: "Nombre de los datos"
+#     file: /datos/mi-informe/datos.csv
 # references:
 #   - title: "Título de la fuente"
 #     author: "Apellido, N."

@@ -4,10 +4,12 @@
  * metadatos y texto; tipografía, espacios, imágenes y recomendaciones salen de aquí.
  */
 import type { MarkdownHeading } from 'astro';
+import { existsSync, statSync } from 'node:fs';
 import { Image, getImage } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 import PublicationCard from '../components/PublicationCard.astro';
+import CitaInforme from '../components/CitaInforme.astro';
 import { editorial, recomendaciones, sitio } from '../config/sitio';
 import {
   autorDe, fechaISO, fechaPublicacion, nombreCategoria, rutaAutor, rutaCategoria, rutaEtiqueta,
@@ -44,9 +46,29 @@ const formatoReferencia = (r: (typeof data.references)[number]) => {
   return { autor: partes, titulo: r.title, editorial: r.publisher, url: r.url, consulta: r.accessed && fechaPublicacion(r.accessed) };
 };
 
+// Datos descargables (opcional): cada archivo debe existir en public/datos/<informe>/.
+const datasets = data.datasets.map(d => {
+  const ruta = `public${d.file}`;
+  if (!d.file.startsWith(`/datos/${entry.id}/`)) throw new Error(`«${entry.id}»: los datos descargables van en public/datos/${entry.id}/ (${d.file}).`);
+  if (!existsSync(ruta)) throw new Error(`«${entry.id}»: no existe ${ruta}, declarado en «datasets».`);
+  const kb = statSync(ruta).size / 1024;
+  const peso = kb < 1024 ? `${Math.max(1, Math.round(kb))} KB` : `${(kb / 1024).toLocaleString('es-DO', { maximumFractionDigits: 1 })} MB`;
+  return { ...d, formato: d.file.split('.').pop()!.toUpperCase(), peso };
+});
+
 const titulo = data.seoTitle ?? `${data.title} | ${sitio.nombre}`;
 const descripcion = data.seoDescription ?? data.description;
 const urlCanonica = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const datosCita = {
+  id: entry.id,
+  titulo: data.title,
+  fecha: data.publishedAt,
+  url: urlCanonica,
+  autor: { nombre: autor.data.name, nombreCita: autor.data.citationName, organizacion: autor.data.kind === 'organizacion' },
+  editorial: sitio.nombre,
+  demo: data.demo,
+};
+const fechaCitation = fechaISO(data.publishedAt).replaceAll('-', '/');
 const imagenSocial = new URL((await getImage({ src: data.coverImage, width: 1200, format: 'jpg' })).src, Astro.site ?? Astro.url).href;
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -76,10 +98,19 @@ const jsonLd = {
   article={{ publishedTime: data.publishedAt, modifiedTime: data.updatedAt, author: autor.data.name, section: categoria, tags: data.tags }}
   jsonLd={jsonLd}
 >
+  <Fragment slot="head">
+    <meta name="citation_title" content={data.title} />
+    <meta name="citation_author" content={autor.data.citationName ?? autor.data.name} />
+    <meta name="citation_publication_date" content={fechaCitation} />
+    <meta name="citation_technical_report_institution" content={sitio.nombre} />
+    <meta name="citation_language" content="es" />
+    <meta name="citation_abstract_html_url" content={urlCanonica} />
+  </Fragment>
   <main id="contenido">
     <article class="report" aria-labelledby="report-title">
       <header class="report-header">
         <div class="report-header__inner">
+          <p class="print-only report-print-url">{sitio.nombre} · {urlCanonica}</p>
           <nav class="breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/paginas/publicaciones/">Publicaciones</a><span aria-hidden="true">/</span><a href={rutaCategoria(data.category)}>{categoria}</a></nav>
           <p class="report-kicker"><a href={rutaCategoria(data.category)}>{categoria}</a></p>
           <h1 id="report-title">{data.title}</h1>
@@ -94,7 +125,10 @@ const jsonLd = {
                 {' · '}{minutos} min de lectura
               </span>
             </div>
-            <button class="share-button" id="share-button" type="button">Copiar enlace <span aria-hidden="true">↗</span></button>
+            <div class="report-actions">
+              <button class="share-button" id="share-button" type="button">Copiar enlace <span aria-hidden="true">↗</span></button>
+              <button class="share-button" id="print-button" type="button">Imprimir / PDF</button>
+            </div>
           </div>
           <p class="share-feedback" id="share-feedback" role="status"></p>
           {data.draft && <p class="report-notice"><strong class="trust-badge">BORRADOR</strong> Vista previa local. Esta publicación se excluye de producción.</p>}
@@ -141,6 +175,21 @@ const jsonLd = {
                 </ol>
               </section>
             )}
+            {datasets.length > 0 && (
+              <section class="report-datasets" aria-labelledby="datos-descargables">
+                <h2 id="datos-descargables">Datos</h2>
+                <ul>
+                  {datasets.map(d => (
+                    <li>
+                      <a href={d.file} download>{d.label}</a>
+                      <span class="report-datasets__meta">{d.formato} · {d.peso}</span>
+                      {d.description && <p>{d.description}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+            <CitaInforme datos={datosCita} />
             <ul class="report-tags" aria-label="Etiquetas">
               {data.tags.map(tag => <li><a href={rutaEtiqueta(tag)}>{tag}</a></li>)}
             </ul>

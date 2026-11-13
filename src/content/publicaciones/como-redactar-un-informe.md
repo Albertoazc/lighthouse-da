@@ -10,6 +10,10 @@ coverAlt: "Ilustración de un documento con título, párrafos, una tabla y un g
 draft: false
 demo: true
 relatedReports: ["numeros-indice-demo", "inversion-y-crecimiento-demo"]
+datasets:
+  - label: "Indicadores A y B por trimestre"
+    file: /datos/como-redactar-un-informe/indicadores-trimestrales.csv
+    description: "Datos simulados de la tabla 4 y los gráficos 1 y 2. CSV con separador «;» y coma decimal."
 references:
   - title: "CommonMark Spec"
     publisher: "CommonMark"
@@ -267,7 +271,36 @@ Resultado (pasa el cursor sobre los puntos o haz clic en la leyenda):
 ![Gráfico interactivo de líneas con los indicadores A y B; al pasar el cursor se ve el valor de cada trimestre.](/interactivos/como-redactar-un-informe/indicadores-trimestrales.html "Gráfico 2. Indicadores A y B por trimestre (interactivo)")
 *Fuente: datos simulados para este ejemplo.*
 
-El gráfico se muestra en un marco aislado, con la misma proporción 16:9 que los gráficos estáticos, y con un enlace para abrirlo a pantalla completa. Al imprimir la página, el marco se oculta. Si las cifras exactas importan, publica también la tabla.
+El gráfico se muestra en un marco aislado, con la misma proporción 16:9 que los gráficos estáticos, y con un enlace para abrirlo a pantalla completa. Al imprimir la página, el marco se sustituye por un aviso. Si las cifras exactas importan, publica también la tabla.
+
+### 8.1 Cómo se generaron estos gráficos
+
+Los dos gráficos de este informe salen del kit de gráficos de Lighthouse D&A, en la carpeta `analisis/`. Cada informe tiene allí sus datos de origen y un script que produce todo con el formato exigido:
+
+```bash
+python analisis/informes/como-redactar-un-informe/graficos.py
+```
+
+```text
+✓ PNG  src/assets/graficos/como-redactar-un-informe/indicadores-trimestrales.png  (1600 × 900 px)
+✓ HTML public/interactivos/como-redactar-un-informe/indicadores-trimestrales.html
+✓ CSV  public/datos/como-redactar-un-informe/indicadores-trimestrales.csv
+```
+
+Si los datos cambian, se vuelve a ejecutar el script y los gráficos se actualizan sin retoques manuales.
+
+### 8.2 Datos descargables (opcional)
+
+Si quieres que el lector pueda descargar los datos, guarda el archivo en `public/datos/<nombre-del-informe>/` y decláralo en los metadatos:
+
+```yaml
+datasets:
+  - label: "Indicadores A y B por trimestre"
+    file: /datos/como-redactar-un-informe/indicadores-trimestrales.csv
+    description: "Datos simulados de la tabla 4 y los gráficos 1 y 2."
+```
+
+La plantilla añade al final del informe una sección «Datos» con el enlace, el formato y el tamaño del archivo, como en este informe. Se admiten `.csv`, `.xlsx`, `.json` y `.zip`.
 
 ## 9. Fotografías e ilustraciones
 
@@ -295,8 +328,9 @@ Las imágenes que no son gráficos —fotografías, mapas ilustrativos, esquemas
 1. Revisa el informe con `npm run dev` en escritorio y en móvil.
 2. Comprueba que cada cifra del texto coincide con su tabla o gráfico.
 3. Verifica que cada gráfico y cada tabla tienen número, título y fuente.
-4. Cambia `draft: true` por `draft: false`.
-5. Ejecuta `npm run build` y `npm run test:site`; si algo falla, el mensaje indica qué corregir.
+4. Revisa al final el bloque «Cómo citar este informe»: se genera solo a partir del título, el autor y la fecha.
+5. Cambia `draft: true` por `draft: false`.
+6. Ejecuta `npm run build` y `npm run test:site`; si algo falla, el mensaje indica qué corregir.
 
 ## Conclusión
 

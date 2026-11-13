@@ -15,9 +15,16 @@ Astro genera un sitio estático a partir de `src/pages/`. Los informes se escrib
 - `src/assets/`: resto de imágenes optimizadas por Astro (portadas, fotos de autor, ilustraciones).
 - `public/assets/`: logo, faro de la portada y favicon (se sirven sin procesar).
 
+## Análisis (fuera del sitio)
+
+- `analisis/lighthouse_graficos.py`: kit de gráficos (estilo de marca, exportación PNG/HTML/CSV con validación).
+- `analisis/informes/<informe>/`: datos de origen y `graficos.py` de cada informe.
+- `public/datos/<informe>/`: datos descargables opcionales declarados en `datasets`.
+
 ## Lógica
 
 - `src/lib/publicaciones.ts`: listado público (sin borradores), rutas, autores, etiquetas, fechas y tiempo de lectura.
+- `src/lib/cita.ts`: citas APA 7 y BibTeX a partir de los metadatos (bloque `CitaInforme`).
 - `src/lib/recomendaciones.ts`: algoritmo de recomendaciones, independiente de Astro y probado en `scripts/recomendaciones.test.mjs`.
 - `src/integrations/sitemap.mjs`: genera `sitemap.xml` tras la compilación y omite páginas `noindex`.
 - `src/integrations/markdown.mjs`: convierte `![…](….png|.html "Gráfico N. …")` + `*Fuente: …*` en figuras validadas (PNG o marco interactivo) y envuelve las tablas en un contenedor desplazable.
@@ -26,7 +33,7 @@ Astro genera un sitio estático a partir de `src/pages/`. Los informes se escrib
 
 - `src/layouts/BaseLayout.astro`: documento HTML, SEO (canonical, Open Graph, Twitter, JSON-LD, RSS), fuentes y navegación.
 - `src/layouts/ArticleLayout.astro`: plantilla de informe: encabezado, portada, índice, cuerpo, columna lateral, cierre, autor y recomendaciones.
-- `src/components/`: `PublicationCard` (variantes lead/standard/compact/list), `AuthorCard`, `Catalogo`, `Pagination`, cabecera, pie y portada.
+- `src/components/`: `PublicationCard` (variantes lead/standard/compact/list), `AuthorCard`, `Catalogo`, `Pagination`, `CitaInforme`, cabecera, pie y portada.
 - `src/styles/tokens.css`: tokens de diseño (colores, tipografías, escala, espacios, bordes, anchos, breakpoints).
 - `src/styles/global.css`, `prosa.css`, `publicacion.css`, `paginas.css`: estilos compartidos, cuerpo editorial, plantilla de informe y páginas institucionales.
 - `src/scripts/`: menú móvil, búsqueda local (carga `/buscar.json` al abrirse) e índice/progreso de lectura.

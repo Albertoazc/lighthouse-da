@@ -1,0 +1,39 @@
+---
+/** «Cómo citar este informe»: APA 7 visible y BibTeX desplegable, ambos con botón de copia. */
+import { citaAPA, citaBibTeX, type DatosCita } from '../lib/cita';
+interface Props { datos: DatosCita; }
+const { datos } = Astro.props;
+const apa = citaAPA(datos);
+const bibtex = citaBibTeX(datos);
+---
+<section class="cita" aria-labelledby="como-citar">
+  <h2 id="como-citar" class="cita__titulo">Cómo citar este informe</h2>
+  <p class="cita__apa" id="cita-apa" data-texto={apa.texto}>{apa.antes}<cite>{apa.titulo}</cite>{apa.despues}</p>
+  <div class="cita__acciones">
+    <button type="button" class="cita__boton" data-copiar="cita-apa">Copiar cita (APA)</button>
+    <details class="cita__bibtex">
+      <summary>BibTeX</summary>
+      <pre id="cita-bibtex" data-texto={bibtex}>{bibtex}</pre>
+      <button type="button" class="cita__boton" data-copiar="cita-bibtex">Copiar BibTeX</button>
+    </details>
+  </div>
+  <p class="cita__estado" role="status" aria-live="polite"></p>
+</section>
+
+<style>
+  .cita { padding: var(--space-5) 0 0; border-top: var(--border); }
+  .cita__titulo { margin: 0 0 var(--space-3); font: 700 10px/1.3 var(--font-sans); letter-spacing: .16em; text-transform: uppercase; color: var(--color-accent-strong); }
+  .cita__apa { margin: 0; padding: var(--space-4) var(--space-5); background: var(--color-surface); border-left: 3px solid var(--color-accent); font: 400 var(--text-sm)/1.65 var(--font-sans); color: var(--color-text); overflow-wrap: anywhere; }
+  .cita__apa cite { font-style: italic; }
+  .cita__acciones { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-3); margin-top: var(--space-3); }
+  .cita__boton { padding: 8px 12px; background: transparent; border: var(--border-strong); border-radius: var(--radius-md); color: var(--color-link); font: 700 var(--text-xs)/1 var(--font-sans); cursor: pointer; }
+  .cita__boton:hover { background: var(--color-accent-soft); }
+  .cita__bibtex { flex-basis: 100%; font: 600 var(--text-xs)/1.4 var(--font-sans); color: var(--color-text-soft); }
+  .cita__bibtex summary { cursor: pointer; width: fit-content; padding: 4px 0; }
+  .cita__bibtex pre { margin: var(--space-2) 0; padding: var(--space-3) var(--space-4); background: #fbfcfa; border: var(--border); font: 400 12px/1.55 ui-monospace, 'Cascadia Code', Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .cita__estado { margin: var(--space-2) 0 0; min-height: 1.3em; font: 400 var(--text-xs)/1.3 var(--font-sans); color: var(--color-accent-strong); }
+  @media print {
+    .cita__acciones, .cita__estado { display: none; }
+    .cita__apa { background: none; padding: 0 0 0 10px; }
+  }
+</style>

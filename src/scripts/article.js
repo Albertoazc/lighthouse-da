@@ -32,4 +32,13 @@
     try{await navigator.clipboard.writeText(location.href);if(feedback)feedback.textContent='Enlace copiado al portapapeles.';}
     catch{if(feedback)feedback.textContent='Copia la dirección del navegador.';}
   });
+  document.querySelector('#print-button')?.addEventListener('click',()=>window.print());
+  // «Cómo citar»: copia el texto plano de la cita (APA o BibTeX).
+  document.querySelectorAll('[data-copiar]').forEach(boton=>boton.addEventListener('click',async()=>{
+    const origen=document.getElementById(boton.dataset.copiar);
+    const estado=boton.closest('.cita')?.querySelector('.cita__estado');
+    const texto=origen?.dataset.texto||origen?.textContent||'';
+    try{await navigator.clipboard.writeText(texto);if(estado)estado.textContent='Cita copiada al portapapeles.';}
+    catch{if(estado)estado.textContent='Selecciona el texto y cópialo manualmente.';}
+  }));
 })();

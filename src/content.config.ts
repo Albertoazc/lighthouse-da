@@ -24,6 +24,8 @@ const autores = defineCollection({
     links: z.array(z.object({ label: texto('links.label'), url: z.string().url('Cada enlace del autor necesita una URL completa (https://…).') })).default([]),
     /** Orden en la página de Equipo (menor primero). */
     order: z.number().int().default(100),
+    /** Forma del nombre en citas APA, p. ej. «Pérez Gómez, M.». Si se omite, se usa `name`. */
+    citationName: z.string().trim().optional(),
   }),
 });
 
@@ -66,6 +68,13 @@ const publicaciones = defineCollection({
     readingTime: z.number().int().positive().optional(),
     relatedReports: z.array(reference('publicaciones')).default([]),
     references: z.array(referencia).default([]),
+    /** Datos descargables (opcional): archivos en public/datos/<informe>/. */
+    datasets: z.array(z.object({
+      label: texto('datasets.label'),
+      file: z.string().regex(/^\/datos\/[a-z0-9-]+\/[a-z0-9-]+\.(csv|xlsx|json|zip)$/,
+        'Cada archivo de «datasets» debe estar en /datos/<informe>/ y ser .csv, .xlsx, .json o .zip.'),
+      description: z.string().trim().optional(),
+    })).default([]),
     seoTitle: z.string().trim().optional(),
     seoDescription: z.string().trim().optional(),
   }),
