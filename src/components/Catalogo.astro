@@ -1,0 +1,71 @@
+---
+/** Vista común del catálogo, de las categorías y de las etiquetas (una sola implementación). */
+import type { Page } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PublicationCard from './PublicationCard.astro';
+import Pagination from './Pagination.astro';
+import { categorias } from '../config/categorias';
+import { etiquetas, rutaCategoria, rutaEtiqueta, todasLasPublicaciones, type Publicacion } from '../lib/publicaciones';
+import { sitio } from '../config/sitio';
+import '../styles/paginas.css';
+
+interface Props {
+  page: Page<Publicacion>;
+  title: string;
+  lead: string;
+  eyebrow: string;
+  metaTitle: string;
+  metaDescription: string;
+  categoriaActual?: string;
+  etiquetaActual?: string;
+  breadcrumb?: { label: string; href?: string }[];
+}
+const { page, title, lead, eyebrow, metaTitle, metaDescription, categoriaActual, etiquetaActual, breadcrumb = [] } = Astro.props;
+const todas = await todasLasPublicaciones();
+const conteo = new Map(categorias.map(c => [c.id, todas.filter(p => p.data.category === c.id).length]));
+const temas = etiquetas(todas).slice(0, 24);
+const soloDemos = page.data.length > 0 && page.data.every(p => p.data.demo);
+const titulo = page.currentPage > 1 ? `${metaTitle} — página ${page.currentPage} | ${sitio.nombre}` : `${metaTitle} | ${sitio.nombre}`;
+---
+<BaseLayout title={titulo} description={metaDescription} active="publicaciones" pageClass="section-page" demo={soloDemos}>
+  <main id="contenido">
+    <section class="page-hero page-hero--compact" aria-labelledby="page-title"><div class="container">
+      <nav class="page-breadcrumbs" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a><span aria-hidden="true">/</span>
+        {breadcrumb.length === 0 ? <span aria-current="page">Publicaciones</span> : <a href="/paginas/publicaciones/">Publicaciones</a>}
+        {breadcrumb.map((b, i) => <><span aria-hidden="true">/</span>{b.href && i < breadcrumb.length - 1 ? <a href={b.href}>{b.label}</a> : <span aria-current="page">{b.label}</span>}</>)}
+      </nav>
+      <p class="eyebrow"><span class="square" aria-hidden="true"></span> {eyebrow}</p>
+      <h1 id="page-title">{title}<span class="green-period">.</span></h1>
+      <p class="page-lead">{lead}</p>
+    </div></section>
+
+    <section class="page-section catalogue" aria-label="Listado de publicaciones"><div class="container">
+      <nav aria-label="Filtrar por categoría">
+        <ul class="filter-nav">
+          <li><a href="/paginas/publicaciones/" aria-current={!categoriaActual && !etiquetaActual ? 'page' : undefined}>Todas <small>{todas.length}</small></a></li>
+          {categorias.filter(c => (conteo.get(c.id) ?? 0) > 0).map(c => (
+            <li><a href={rutaCategoria(c.id)} aria-current={categoriaActual === c.id ? 'page' : undefined}>{c.nombre} <small>{conteo.get(c.id)}</small></a></li>
+          ))}
+        </ul>
+      </nav>
+
+      {page.data.some(p => p.data.demo) && <p class="sample-note"><span class="sample-dot" aria-hidden="true"></span> Las publicaciones marcadas como «Demostración» utilizan datos simulados y no representan investigaciones oficiales.</p>}
+
+      {page.data.length > 0
+        ? <div class="card-grid catalogue-grid">{page.data.map(post => <PublicationCard post={post} headingLevel="h2" />)}</div>
+        : <p class="empty-state">Estamos preparando nuestras próximas publicaciones.</p>}
+
+      <Pagination page={page} />
+
+      {temas.length > 0 && (
+        <nav class="catalogue-tags" aria-labelledby="temas-title">
+          <h2 id="temas-title" class="filter-label">Explorar por tema</h2>
+          <ul class="filter-nav">
+            {temas.map(t => <li><a href={rutaEtiqueta(t.nombre)} aria-current={etiquetaActual === t.slug ? 'page' : undefined}>{t.nombre} <small>{t.posts.length}</small></a></li>)}
+          </ul>
+        </nav>
+      )}
+    </div></section>
+  </main>
+</BaseLayout>

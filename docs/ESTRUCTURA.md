@@ -1,22 +1,47 @@
 # Arquitectura del repositorio
 
-Astro genera un sitio estático a partir de `src/pages/`. MDX está habilitado mediante `@astrojs/mdx` en `astro.config.mjs`; no se requiere servidor de aplicación en producción.
+Astro genera un sitio estático a partir de `src/pages/`. Los informes se escriben en Markdown (`.md`); no hay servidor ni base de datos en producción. Sitemap, RSS y búsqueda se resuelven en la compilación, sin dependencias adicionales.
 
-- `src/components/`: Header, Footer, Hero, AboutBand, ClosingBand, PublicationCard y componentes de informes.
-- `src/layouts/BaseLayout.astro`: documento HTML, SEO, fuentes, estilos generales y navegación compartida.
-- `src/layouts/ArticleLayout.astro`: metadatos editoriales, avisos, índice automático y contenido del artículo.
-- `src/content.config.ts`: colección `publicaciones` con carga de MD/MDX y validación de metadatos.
-- `src/content/publicaciones/`: un informe publicado y una plantilla en borrador.
-- `src/lib/publicaciones.ts`: listado público ordenado por fecha, construcción de rutas y fechas legibles.
-- `src/pages/publicaciones/[slug].astro`: rutas estáticas; admite borradores solo en desarrollo.
-- `src/pages/paginas/`: catálogo automático, Nosotros, Equipo y Contacto, conservando las rutas existentes.
-- `src/data/`: fuente única de los datos simulados y datos de ejemplo de la plantilla.
-- `src/styles/`: estilos generales, institucionales y de artículos. Los componentes de gráficos mantienen sus estilos encapsulados.
-- `src/scripts/`: menú móvil, búsqueda sobre las tarjetas reales e interacciones del artículo. Astro empaqueta los módulos.
-- `public/assets/`: únicamente logo, faro y miniatura económica, sin recomprimir.
-- `scripts/check-site.mjs`: comprobación sin dependencias adicionales sobre los HTML compilados.
-- `.github/workflows/astro-build.yml`: instalación reproducible, compilación y validación en ramas de trabajo y PR hacia `main`.
+## Contenido y configuración
 
-No existen importaciones `?raw` ni un renderizador alternativo de publicaciones HTML. Los originales versionados siguen en el historial de Git; no se conserva una segunda estructura activa.
+- `src/content.config.ts`: colecciones `publicaciones` y `autores`, validadas con Zod (mensajes de error en español).
+- `src/content/publicaciones/`: informes `.md`, `plantilla-borrador.md` e informe didáctico `como-redactar-un-informe.md`.
+- `public/interactivos/<informe>/`: gráficos interactivos (`.html` autocontenidos).
+- `src/content/autores/`: un YAML por autor; los informes lo referencian por identificador.
+- `src/config/categorias.ts`: lista de categorías (identificador, nombre, descripción).
+- `src/config/navegacion.ts`: enlaces de la cabecera y el pie.
+- `src/config/sitio.ts`: nombre del sitio, justificación del texto, tiempo de lectura, paginación y pesos de recomendación.
+- `src/assets/graficos/<informe>/`: gráficos de cada informe, exportados como PNG de 1600 × 900 px (validados por `scripts/check-graficos.mjs`).
+- `src/assets/`: resto de imágenes optimizadas por Astro (portadas, fotos de autor, ilustraciones).
+- `public/assets/`: logo, faro de la portada y favicon (se sirven sin procesar).
 
-Para agregar contenido consulta [GUIA-PUBLICACIONES.md](GUIA-PUBLICACIONES.md). Para el inventario de cambios y las pruebas consulta [INFORME-LIMPIEZA.md](INFORME-LIMPIEZA.md).
+## Lógica
+
+- `src/lib/publicaciones.ts`: listado público (sin borradores), rutas, autores, etiquetas, fechas y tiempo de lectura.
+- `src/lib/recomendaciones.ts`: algoritmo de recomendaciones, independiente de Astro y probado en `scripts/recomendaciones.test.mjs`.
+- `src/integrations/sitemap.mjs`: genera `sitemap.xml` tras la compilación y omite páginas `noindex`.
+- `src/integrations/markdown.mjs`: convierte `![…](….png|.html "Gráfico N. …")` + `*Fuente: …*` en figuras validadas (PNG o marco interactivo) y envuelve las tablas en un contenedor desplazable.
+
+## Presentación
+
+- `src/layouts/BaseLayout.astro`: documento HTML, SEO (canonical, Open Graph, Twitter, JSON-LD, RSS), fuentes y navegación.
+- `src/layouts/ArticleLayout.astro`: plantilla de informe: encabezado, portada, índice, cuerpo, columna lateral, cierre, autor y recomendaciones.
+- `src/components/`: `PublicationCard` (variantes lead/standard/compact/list), `AuthorCard`, `Catalogo`, `Pagination`, cabecera, pie y portada.
+- `src/styles/tokens.css`: tokens de diseño (colores, tipografías, escala, espacios, bordes, anchos, breakpoints).
+- `src/styles/global.css`, `prosa.css`, `publicacion.css`, `paginas.css`: estilos compartidos, cuerpo editorial, plantilla de informe y páginas institucionales.
+- `src/scripts/`: menú móvil, búsqueda local (carga `/buscar.json` al abrirse) e índice/progreso de lectura.
+
+## Rutas
+
+| Ruta | Archivo |
+| --- | --- |
+| `/` | `src/pages/index.astro` |
+| `/paginas/publicaciones/` (y `/2/`, `/3/`…) | `src/pages/paginas/publicaciones/[...page].astro` |
+| `/paginas/publicaciones/categoria/<id>/` | `…/categoria/[categoria]/[...page].astro` |
+| `/paginas/publicaciones/etiqueta/<tema>/` | `…/etiqueta/[etiqueta]/[...page].astro` |
+| `/publicaciones/<archivo>/` | `src/pages/publicaciones/[slug].astro` |
+| `/paginas/equipo/` y `/paginas/equipo/<autor>/` | `equipo.astro` y `equipo/[autor].astro` |
+| `/paginas/nosotros/`, `/paginas/contacto/` | páginas estáticas |
+| `/rss.xml`, `/buscar.json`, `/sitemap.xml` | endpoints e integración |
+
+Para publicar consulta [GUIA-PUBLICACIONES.md](GUIA-PUBLICACIONES.md).

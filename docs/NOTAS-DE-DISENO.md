@@ -1,13 +1,13 @@
 # Notas de diseño · Lighthouse D&A
 
-- Mantener azul petróleo, verde salvia y fondos claros, así como el logo circular con faro.
-- El faro original de `public/assets/hero-art.webp` mide 1448 × 1086 píxeles. Se conserva sin recompresión y con su composición responsive.
-- Fuentes: DM Sans para interfaz y texto; DM Serif Display para títulos y frases editoriales.
-- La portada conserva su cabecera, ilustración, principios, banda institucional y cierre. Una tarjeta amplia presenta la única publicación actual; no se añaden tarjetas de relleno.
-- Al agregar artículos MDX, la tarjeta más reciente queda destacada y los restantes se muestran en una cuadrícula.
-- El informe mantiene su narrativa, indicadores, línea de tres series, barras comparativas y tabla. Las etiquetas conservan un ancho legible mediante desplazamiento horizontal en móvil.
-- Mostrar de forma visible que los datos del informe económico son simulados. No presentar la demostración como una investigación oficial; sus páginas llevan `noindex`.
-- Nosotros, Equipo y Contacto son páginas Astro. Los perfiles y canales pendientes se indican expresamente, sin inventar personas ni direcciones.
-- Los estilos comunes viven en `src/styles/`; el encabezado y el pie son compartidos. Las interacciones móviles se gestionan una sola vez.
+- La identidad se centraliza en `src/styles/tokens.css`: azul petróleo, verde salvia, fondos claros, escala tipográfica, espacios, bordes, ancho de lectura (~68 caracteres) y ancho del sitio. Cambiar un token cambia todo el sitio.
+- Tipografías: DM Serif Display para títulos y citas; DM Sans para interfaz, metadatos y subtítulos H3/H4; Source Serif 4 para el cuerpo de lectura largo (DM Serif Display no está pensada para texto corrido). Las tres se cargan desde Google Fonts con alternativas locales.
+- Se conservan el logo circular con faro y la ilustración de la portada (`public/assets/hero-art.webp`, 1448 × 1086 px).
+- Composición editorial: separadores finos, reglas de 2 px sobre títulos de sección, tarjetas sin bordes ni sombras, imágenes en proporciones fijas (16:9 portada de informe, 3:2 tarjetas) y animaciones mínimas que respetan `prefers-reduced-motion`.
+- Informe en escritorio (≥ 1180 px): índice a la izquierda, texto al centro, lecturas relacionadas a la derecha. En tablet el índice y el lateral comparten la columna derecha; en móvil el índice es plegable sobre el texto y las lecturas pasan debajo.
+- Los informes y páginas de demostración muestran un aviso visible y llevan `noindex`. No se presentan datos simulados como estadísticas reales.
+- Los gráficos se elaboran fuera del sitio y se publican como PNG de 1600 × 900 px (16:9) o como HTML interactivo en un marco 16:9, con título, número y fuente puestos por la plantilla. Un único formato garantiza que todos ocupen el mismo espacio y se lean igual.
+- Las portadas de los informes de demostración (`src/assets/portadas/`) son ilustraciones abstractas sin datos.
+- Nosotros, Equipo y Contacto no inventan personas ni canales: Equipo se alimenta de la colección de autores y Contacto indica que los canales están pendientes.
 
-Las referencias históricas de diseño permanecen en [REFERENCIAS.md](REFERENCIAS.md). Sus menciones de páginas HTML y pruebas antiguas describen fases anteriores, no la arquitectura ni la validación actuales.
+Las referencias históricas de diseño permanecen en [REFERENCIAS.md](REFERENCIAS.md).

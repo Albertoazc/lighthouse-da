@@ -1,23 +1,18 @@
 ---
 title: "¿Más inversión significa más crecimiento?"
 description: "Un ejercicio visual sobre inversión pública, inversión privada y actividad económica: qué se observa y qué no se puede concluir. Datos 100 % simulados."
-category: "ECONOMÍA"
-authors: ["Equipo Lighthouse D&A"]
+author: equipo-lighthouse
 publishedAt: 2026-11-04
-cover: "/assets/thumb-economia.webp"
+category: economia
+tags: ["inversión", "crecimiento económico", "causalidad", "visualización de datos"]
+coverImage: ../../assets/portadas/inversion-y-crecimiento.webp
+coverAlt: "Ilustración abstracta de barras verdes crecientes atravesadas por una línea azul ascendente."
+featured: true
 draft: false
 demo: true
-readingMinutes: 8
+relatedReports: ["evaluar-politicas-publicas-demo"]
+seoDescription: "Ejercicio de demostración con datos simulados: cómo leer series de inversión y actividad económica sin confundir correlación con causalidad."
 ---
-
-import InformeEstilos from '../../components/InformeEstilos.astro'
-import InformeDestacados from '../../components/InformeDestacados.astro'
-import InformeLinea from '../../components/InformeLinea.astro'
-import InformeBarras from '../../components/InformeBarras.astro'
-import InformeTabla from '../../components/InformeTabla.astro'
-import { registros, series, variaciones, destacados } from '../../data/inversion-simulada'
-
-<InformeEstilos />
 
 *Informe de demostración · Edición experimental · Todos los números son inventados para ilustrar el diseño editorial y no representan la economía dominicana ni ninguna otra economía real.*
 
@@ -29,7 +24,9 @@ Para explorar esa diferencia entre **describir una trayectoria** e **identificar
 
 Los resultados iniciales, siempre dentro de este escenario inventado, son los siguientes:
 
-<InformeDestacados items={destacados} />
+- **+55 %** — inversión privada (2019–2025)
+- **+41 %** — inversión pública (2019–2025)
+- **+24 %** — actividad económica (2019–2025)
 
 Las tres cifras corresponden al cambio acumulado entre el inicio y el final del período. Ninguna debe interpretarse como una tasa anual de crecimiento ni como una estimación de impacto.
 
@@ -37,7 +34,8 @@ Las tres cifras corresponden al cambio acumulado entre el inicio y el final del 
 
 La primera visualización revela una diferencia importante: aunque los tres indicadores terminan por encima de su nivel inicial, **no siguen exactamente la misma trayectoria**. El índice de inversión privada presenta la mayor expansión acumulada; el de inversión pública se mueve a un ritmo menor, mientras que la actividad económica se incrementa de manera más moderada.
 
-<InformeLinea titulo="Inversión y actividad: evolución comparada" subtitulo="Tres indicadores hipotéticos, expresados como índices con 2019 = 100" periodos={registros.map(d => d.periodo)} series={series} />
+![Gráfico de líneas de 2019 a 2025. Las tres series parten de 100, caen en 2020 y luego crecen: la inversión privada llega a 155, la pública a 141 y la actividad económica a 124.](../../assets/graficos/inversion-y-crecimiento-demo/evolucion-inversion-actividad.png "Gráfico 1. Inversión y actividad: evolución comparada (índice, 2019 = 100)")
+*Fuente: simulación didáctica de Lighthouse D&A. Índices inventados. Nota: las líneas muestran trayectorias descriptivas; no identifican efectos causales.*
 
 Al final del ejercicio, la inversión privada alcanza un índice de 155 y la pública uno de 141; la actividad se sitúa en 124. En términos acumulados, esto equivale a expansiones del 55 %, 41 % y 24 %, respectivamente. Ese resultado sugiere que los indicadores no crecen a una velocidad idéntica y que las comparaciones de niveles requieren cautela.
 
@@ -49,15 +47,26 @@ Un segundo detalle aparece cuando miramos la trayectoria intermedia. La caída h
 
 La segunda visualización resume únicamente la diferencia entre el año inicial y el final. Es útil para comunicar el resultado en pocos segundos, pero también elimina la información sobre las fluctuaciones intermedias. Por eso, los gráficos de variaciones acumuladas deben leerse junto con las series temporales y no sustituirlas.
 
-<InformeBarras titulo="Variación acumulada entre 2019 y 2025" subtitulo="Cambio porcentual respecto al índice base: (índice final / 100 − 1) × 100" data={variaciones} />
+![Gráfico de barras horizontales: inversión pública +41 %, inversión privada +55 % y actividad económica +24 %.](../../assets/graficos/inversion-y-crecimiento-demo/variacion-acumulada.png "Gráfico 2. Variación acumulada entre 2019 y 2025")
+*Fuente: cálculo sobre índices simulados: (índice final / 100 − 1) × 100. Nota: la comparación no implica una relación causal entre las variables.*
 
 La inversión privada presenta la expansión más elevada del ejercicio. La distancia con el índice de actividad económica, sin embargo, no representa una “brecha de eficiencia” ni una estimación del retorno económico de esa inversión. Un índice de inversión puede aumentar por cambios en cantidades, precios o composición; la actividad depende de numerosos mecanismos y de horizontes temporales que no se observan en esta comparación simple.
 
 ## 3. Los datos detrás de las visualizaciones
 
-Un informe orientado a la evidencia debe permitir que el lector vea los valores que sostienen sus figuras. La tabla siguiente reproduce los siete registros del ejercicio. **Ambos gráficos se construyen a partir del mismo archivo de datos** (`src/data/inversion-simulada.ts`), por lo que no es necesario volver a introducir manualmente las cifras en cada visualización.
+Un informe orientado a la evidencia debe permitir que el lector vea los valores que sostienen sus figuras. La tabla siguiente reproduce los siete registros del ejercicio. **Ambos gráficos se elaboraron a partir de estos mismos valores** y se exportaron como imagen; la tabla permite comprobarlos.
 
-<InformeTabla registros={registros} />
+| Año | Inversión pública | Inversión privada | Actividad económica |
+| :--- | ---: | ---: | ---: |
+| 2019 | 100 | 100 | 100 |
+| 2020 | 94 | 91 | 96 |
+| 2021 | 104 | 106 | 101 |
+| 2022 | 110 | 117 | 105 |
+| 2023 | 118 | 129 | 110 |
+| 2024 | 129 | 141 | 117 |
+| 2025 | 141 | 155 | 124 |
+
+*Tabla 1. Índices sintéticos, año base 2019 = 100. Todos los valores son ficticios.*
 
 La tabla es también una herramienta para verificar afirmaciones: por ejemplo, permite comprobar que el índice de inversión privada pasa de 100 a 155 entre 2019 y 2025 y que la variación acumulada es, por construcción, del 55 %. En una publicación real, añadiríamos además los enlaces a las fuentes primarias, las unidades, las revisiones de la serie y el código de procesamiento.
 
@@ -75,16 +84,16 @@ Para investigar una hipótesis causal sería necesario formular un mecanismo, de
 
 El siguiente paso sería sustituir los índices ficticios por series verificables, documentar su cobertura temporal y definir las variables con precisión. Por ejemplo, deberíamos distinguir entre inversión pública ejecutada y presupuestada, inversión privada agregada y gasto específico en infraestructura. También tendríamos que aclarar si trabajamos con valores corrientes, valores constantes o medidas físicas, evitando mezclar métricas incompatibles.
 
-Luego prepararíamos el procesamiento de datos con **Python** para generar tablas reproducibles. Una vez validado el análisis, exportaríamos resultados estructurados a la carpeta de datos del proyecto y los mostraríamos en las publicaciones mediante componentes de Astro. Esto separa tres tareas que conviene mantener independientes: recolección de evidencia, estimación estadística y comunicación de resultados.
+Luego prepararíamos el procesamiento de datos con **Python** para generar tablas reproducibles. Una vez validado el análisis, exportaríamos los gráficos como imágenes con un formato común y publicaríamos junto a ellos las tablas con los valores que los sostienen. Esto separa tres tareas que conviene mantener independientes: recolección de evidencia, estimación estadística y comunicación de resultados.
 
 En una versión destinada a publicación incorporaríamos además un repositorio de datos o anexos reproducibles, una bibliografía, la fecha de extracción de cada fuente y una sección de limitaciones metodológicas. El flujo editorial tendría una revisión adicional para comprobar que los títulos, las cifras de las visualizaciones y las conclusiones corresponden exactamente a los resultados del análisis.
 
 ## Conclusión
 
-Este ejemplo muestra la diferencia entre una **página web** y un **documento de investigación publicado en la web**. El informe tiene una narrativa, cifras destacadas, gráficos, tabla y discusión metodológica, pero cada pieza vive en un componente o archivo reutilizable. Podemos cambiar los datos sin redibujar las figuras o alterar el diseño de la página.
+Este ejemplo muestra la diferencia entre una **página web** y un **documento de investigación publicado en la web**. El informe tiene una narrativa, cifras destacadas, gráficos, tabla y discusión metodológica, y todas las piezas comparten una misma plantilla editorial: el diseño de la página no cambia aunque cambien los gráficos o el texto.
 
 La idea central del ejercicio es sencilla: las visualizaciones ayudan a descubrir patrones y a comunicar preguntas. La evidencia causal exige un paso adicional, con un diseño empírico que permita defender la interpretación de los resultados. Esa distinción forma parte de la propuesta editorial de Lighthouse D&A: **pensar con claridad antes de sacar conclusiones**.
 
 ---
 
-**Nota metodológica y de transparencia.** Todo este informe es una simulación educativa creada para probar Astro y MDX. Los índices, los cambios y las interpretaciones descriptivas no deben citarse como estadísticas de República Dominicana ni de otro país. La definición, escala y secuencia de los datos se encuentran en `src/data/inversion-simulada.ts`.
+**Nota metodológica y de transparencia.** Todo este informe es una simulación educativa creada para probar la plantilla editorial. Los índices, los cambios y las interpretaciones descriptivas no deben citarse como estadísticas de República Dominicana ni de otro país. La definición, escala y secuencia de los datos se encuentran en la tabla 1.

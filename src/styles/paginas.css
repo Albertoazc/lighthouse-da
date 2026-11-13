@@ -108,3 +108,23 @@
   .page-section { padding: 24px 0; }
   .principle,.team-card { break-inside: avoid; }
 }
+
+/* Catálogo, categorías, etiquetas y perfiles de autor */
+.page-hero--compact { padding-bottom: 48px; }
+.page-hero--compact h1 { font-size: clamp(40px, 4.8vw, 64px); }
+.catalogue { padding-top: 40px; }
+.catalogue-grid { margin-top: var(--space-6); }
+.catalogue-tags { margin-top: var(--space-8); }
+.author-profile > * { max-width: var(--width-wide); }
+.authors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 32px; }
+.author-tile { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 22px; align-items: start; padding-top: 22px; border-top: 2px solid var(--color-ink); }
+.author-tile__photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; background: var(--color-surface); border: var(--border); }
+.author-tile h3 { font: 400 26px/1.2 var(--font-title); margin: 0 0 6px; }
+.author-tile h3 a:hover { text-decoration: underline; text-underline-offset: .15em; }
+.author-tile p { margin: 0 0 10px; color: var(--body); font-size: 15px; line-height: 1.7; }
+.author-tile .author-tile__role { font-size: 13px; font-weight: 700; color: var(--color-muted); }
+.author-tile .author-tile__count { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-accent-strong); margin: 0; }
+@media (max-width: 510px) {
+  .author-tile { grid-template-columns: 64px minmax(0, 1fr); gap: 16px; }
+  .author-tile__photo { width: 64px; height: 64px; }
+}

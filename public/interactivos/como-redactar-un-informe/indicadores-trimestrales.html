@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Indicadores A y B por trimestre (datos simulados)</title>
+<!--
+  Gráfico interactivo de ejemplo, autocontenido (sin librerías ni servicios externos).
+  Cualquier HTML exportado (Plotly, Highcharts, Vega-Lite…) sirve igual si funciona sin conexión.
+  Requisitos: un solo archivo .html, fondo blanco, diseño adaptable al ancho y alto del marco.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #fff; font-family: 'Segoe UI', system-ui, Arial, sans-serif; color: #33474f; }
+  body { display: flex; flex-direction: column; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 10px 14px 0; font-size: 13px; }
+  .legend button { display: inline-flex; align-items: center; gap: 8px; border: 1px solid #c9d9cd; background: #fff; border-radius: 999px; padding: 5px 12px; font: inherit; font-weight: 600; color: inherit; cursor: pointer; }
+  .legend button[aria-pressed="false"] { opacity: .45; }
+  .legend i { width: 18px; height: 4px; border-radius: 2px; display: inline-block; }
+  .chart { position: relative; flex: 1; min-height: 0; }
+  svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tick { font-size: 12px; fill: #66797f; }
+  .tooltip { position: absolute; pointer-events: none; background: #143b49; color: #fff; padding: 8px 10px; border-radius: 6px; font-size: 12px; line-height: 1.5; white-space: nowrap; transform: translate(-50%, -110%); }
+  .foot { display: flex; justify-content: space-between; padding: 0 14px 8px; font-size: 11px; color: #7a8e8f; }
+</style>
+</head>
+<body>
+  <div class="legend" id="legend"></div>
+  <div class="chart" id="chart"><svg id="svg" role="img" aria-label="Indicador A sube de 102 a 115 y el indicador B de 98 a 108 entre T1 2024 y T4 2025."></svg><div class="tooltip" id="tip" hidden></div></div>
+  <div class="foot"><span>Pasa el cursor o toca un punto · Haz clic en la leyenda para ocultar una serie</span><span>Datos simulados</span></div>
+<script>
+  const periodos = ['T1 2024', 'T2 2024', 'T3 2024', 'T4 2024', 'T1 2025', 'T2 2025', 'T3 2025', 'T4 2025'];
+  const series = [
+    { nombre: 'Indicador A', color: '#214f5b', valores: [102, 104, 103, 107, 109, 112, 111, 115], visible: true },
+    { nombre: 'Indicador B', color: '#82b574', valores: [98, 99, 101, 100, 103, 104, 106, 108], visible: true },
+  ];
+  const svg = document.getElementById('svg'), chart = document.getElementById('chart'), tip = document.getElementById('tip');
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); parent.appendChild(n); return n; };
+
+  const legend = document.getElementById('legend');
+  for (const s of series) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = `<i style="background:${s.color}"></i>${s.nombre}`;
+    b.onclick = () => { s.visible = !s.visible; b.setAttribute('aria-pressed', String(s.visible)); draw(); };
+    legend.appendChild(b);
+  }
+
+  function draw() {
+    const w = chart.clientWidth, h = chart.clientHeight;
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.replaceChildren(); tip.hidden = true;
+    const L = 44, R = 22, T = 18, B = 30, min = 95, max = 120;
+    const x = i => L + i * (w - L - R) / (periodos.length - 1);
+    const y = v => T + (max - v) / (max - min) * (h - T - B);
+    for (let v = min; v <= max; v += 5) {
+      el('line', { x1: L, x2: w - R, y1: y(v), y2: y(v), stroke: '#e3ebe5' }, svg);
+      el('text', { x: L - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, svg).textContent = v;
+    }
+    const step = w < 520 ? 2 : 1;
+    periodos.forEach((p, i) => { if (i % step === 0) el('text', { x: x(i), y: h - 8, 'text-anchor': 'middle', class: 'tick' }, svg).textContent = p; });
+    for (const s of series.filter(s => s.visible)) {
+      el('path', { d: s.valores.map((v, i) => (i ? 'L' : 'M') + x(i) + ' ' + y(v)).join(' '), fill: 'none', stroke: s.color, 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
+      s.valores.forEach((v, i) => {
+        const c = el('circle', { cx: x(i), cy: y(v), r: 6, fill: s.color, stroke: '#fff', 'stroke-width': 2, tabindex: 0 }, svg);
+        const show = () => { tip.hidden = false; tip.style.left = x(i) + 'px'; tip.style.top = y(v) + 'px'; tip.innerHTML = `<strong>${s.nombre}</strong><br>${periodos[i]}: ${v}`; c.setAttribute('r', 9); };
+        const hide = () => { tip.hidden = true; c.setAttribute('r', 6); };
+        c.addEventListener('mouseenter', show); c.addEventListener('focus', show);
+        c.addEventListener('mouseleave', hide); c.addEventListener('blur', hide);
+        c.addEventListener('click', show);
+      });
+    }
+  }
+  new ResizeObserver(draw).observe(chart);
+</script>
+</body>
+</html>

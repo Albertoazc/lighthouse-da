@@ -4,22 +4,80 @@ import PublicationCard from '../components/PublicationCard.astro';
 import Hero from '../components/Hero.astro';
 import AboutBand from '../components/AboutBand.astro';
 import ClosingBand from '../components/ClosingBand.astro';
-import { todasLasPublicaciones } from '../lib/publicaciones';
+import { categorias } from '../config/categorias';
+import { principal, rutaCategoria, todasLasPublicaciones } from '../lib/publicaciones';
+
+// Todo se carga desde la colección: publicar un informe no requiere editar esta página.
 const posts = await todasLasPublicaciones();
-const [latest, ...others] = posts;
+const lead = principal(posts);
+const ultimas = posts.filter(p => p !== lead).slice(0, 3);
+const destacadas = posts.filter(p => p !== lead && p.data.featured).slice(0, 4);
+const porCategoria = categorias
+  .map(c => ({ ...c, posts: posts.filter(p => p.data.category === c.id).slice(0, 3) }))
+  .filter(c => c.posts.length > 0);
+const soloDemos = posts.length > 0 && posts.every(p => p.data.demo);
 ---
-<BaseLayout title="Lighthouse D&A | Más claridad para mejores decisiones" active="inicio" search={true} demo={posts.length > 0 && posts.every(p => p.data.demo)}>
+<BaseLayout title="Lighthouse D&A | Más claridad para mejores decisiones" active="inicio" demo={soloDemos}>
   <main id="contenido">
     <Hero />
-    {latest && <section class="latest-section" id="publicaciones" aria-labelledby="publications-heading">
-      <div class="container">
-        <div class="section-header"><h2 id="publications-heading">{posts.length === 1 ? 'Nuestra primera publicación' : 'Últimas publicaciones'}</h2><a class="section-link" href="/paginas/publicaciones/">Explorar el catálogo <span aria-hidden="true">→</span></a></div>
-        {latest.data.demo && <p class="sample-note"><span class="sample-dot" aria-hidden="true"></span> Informe de demostración con datos 100 % simulados.</p>}
-        <PublicationCard post={latest} featured />
-        {others.length > 0 && <div class="publication-grid additional-publications">{others.map(post => <PublicationCard post={post} />)}</div>}
-      </div>
-    </section>}
+
+    {lead && (
+      <section class="home-section" id="publicaciones" aria-labelledby="lead-heading">
+        <div class="container">
+          <div class="section-heading"><h2 id="lead-heading">{lead.data.featured ? 'Publicación destacada' : 'Última publicación'}</h2><a class="section-link" href="/paginas/publicaciones/">Explorar el catálogo <span aria-hidden="true">→</span></a></div>
+          {soloDemos && <p class="sample-note"><span class="sample-dot" aria-hidden="true"></span> Por ahora, todas las publicaciones son demostraciones con datos simulados.</p>}
+          <PublicationCard post={lead} variant="lead" headingLevel="h3" />
+        </div>
+      </section>
+    )}
+
+    {ultimas.length > 0 && (
+      <section class="home-section" aria-labelledby="latest-heading">
+        <div class="container">
+          <div class="section-heading"><h2 id="latest-heading">Últimas publicaciones</h2></div>
+          <div class="card-grid">{ultimas.map(post => <PublicationCard post={post} headingLevel="h3" />)}</div>
+        </div>
+      </section>
+    )}
+
+    {porCategoria.length > 0 && (
+      <section class="home-section home-section--tinted" aria-labelledby="categories-heading">
+        <div class="container">
+          <div class="section-heading"><h2 id="categories-heading">Por categorías</h2></div>
+          <div class="category-columns">
+            {porCategoria.map(c => (
+              <section class="category-column" aria-labelledby={`cat-${c.id}`}>
+                <h3 id={`cat-${c.id}`} class="category-column__title"><a href={rutaCategoria(c.id)}>{c.nombre}</a></h3>
+                <p class="category-column__intro">{c.descripcion}</p>
+                {c.posts.map(post => <PublicationCard post={post} variant="list" headingLevel="h4" />)}
+                <a class="section-link" href={rutaCategoria(c.id)}>Ver {c.nombre.toLocaleLowerCase('es')} <span aria-hidden="true">→</span></a>
+              </section>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {destacadas.length > 0 && (
+      <section class="home-section" aria-labelledby="featured-heading">
+        <div class="container">
+          <div class="section-heading"><div><h2 id="featured-heading">Investigaciones destacadas</h2><p>Selección editorial de informes con mayor profundidad.</p></div></div>
+          <div class:list={['card-grid', { 'card-grid--2': destacadas.length <= 2, 'card-grid--4': destacadas.length === 4 }]}>{destacadas.map(post => <PublicationCard post={post} headingLevel="h3" />)}</div>
+        </div>
+      </section>
+    )}
+
     <AboutBand />
     <ClosingBand />
   </main>
 </BaseLayout>
+
+<style>
+  .category-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-7) var(--space-6); }
+  .category-column { display: flex; flex-direction: column; align-items: flex-start; }
+  .category-column > :global(.pub-card) { width: 100%; }
+  .category-column__title { margin: 0; font: 700 12px/1.3 var(--font-sans); letter-spacing: .16em; text-transform: uppercase; color: var(--color-accent-strong); }
+  .category-column__title a:hover { text-decoration: underline; text-underline-offset: .25em; }
+  .category-column__intro { margin: var(--space-2) 0 var(--space-2); color: var(--color-muted); font-size: var(--text-sm); line-height: 1.55; }
+  .category-column .section-link { margin-top: var(--space-4); }
+</style>

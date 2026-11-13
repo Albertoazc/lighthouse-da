@@ -2,7 +2,7 @@
 (() => {
   const progress=document.querySelector('#reading-progress-bar');
   const article=document.querySelector('#articulo');
-  const tocLinks=[...document.querySelectorAll('.toc nav a')];
+  const tocLinks=[...document.querySelectorAll('.toc-links a')];
   const sections=tocLinks.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
   let scheduled=false;
   function update() {

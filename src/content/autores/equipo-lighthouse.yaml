@@ -1,0 +1,15 @@
+# Autor institucional. Para añadir una persona, copia este archivo con su identificador
+# (minúsculas y guiones, p. ej. maria-perez.yaml) y guarda su foto en src/assets/autores/.
+name: Equipo editorial Lighthouse D&A
+kind: organizacion
+photo: ../../assets/autores/equipo-lighthouse.svg
+photoAlt: Logotipo de Lighthouse D&A
+role: Investigación, datos y edición
+bio: Firma colectiva del equipo de Lighthouse D&A para publicaciones elaboradas y revisadas de forma conjunta.
+longBio: |
+  Lighthouse D&A es un espacio independiente de análisis, visualización y narrativa de datos.
+  Las publicaciones firmadas por el equipo editorial combinan investigación, procesamiento de datos
+  y edición, y se revisan colectivamente antes de publicarse. Los perfiles individuales del equipo
+  se incorporarán a medida que se presenten sus integrantes.
+links: []
+order: 1

@@ -1,0 +1,27 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Catalogo from '../../../../../components/Catalogo.astro';
+import { editorial } from '../../../../../config/sitio';
+import { categorias } from '../../../../../config/categorias';
+import { todasLasPublicaciones, rutaCategoria } from '../../../../../lib/publicaciones';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await todasLasPublicaciones();
+  return categorias
+    .map(categoria => ({ categoria, posts: posts.filter(p => p.data.category === categoria.id) }))
+    .filter(({ posts }) => posts.length > 0)
+    .flatMap(({ categoria, posts }) => paginate(posts, { params: { categoria: categoria.id }, props: { categoria }, pageSize: editorial.publicacionesPorPagina }));
+}) satisfies GetStaticPaths;
+
+const { page, categoria } = Astro.props;
+---
+<Catalogo
+  page={page}
+  title={categoria.nombre}
+  eyebrow="CATEGORÍA"
+  lead={categoria.descripcion}
+  metaTitle={`${categoria.nombre} · Publicaciones`}
+  metaDescription={`Publicaciones de Lighthouse D&A en ${categoria.nombre}: ${categoria.descripcion}`}
+  categoriaActual={categoria.id}
+  breadcrumb={[{ label: categoria.nombre, href: rutaCategoria(categoria.id) }]}
+/>
