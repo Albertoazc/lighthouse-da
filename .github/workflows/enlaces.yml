@@ -1,0 +1,16 @@
+name: Enlaces externos
+# Comprueba cada lunes que las fuentes citadas en informes y perfiles sigan disponibles.
+# También se puede lanzar a mano desde la pestaña Actions. No bloquea pull requests.
+on:
+  schedule:
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+jobs:
+  enlaces:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/check-enlaces.mjs

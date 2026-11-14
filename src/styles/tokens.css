@@ -1,0 +1,72 @@
+/*
+ * Lighthouse D&A — tokens de diseño.
+ * Fuente única de la identidad visual: colores, tipografías, escala, espacios, bordes y anchos.
+ * Modificar estos valores cambia todo el sitio; los informes no definen estilos propios.
+ *
+ * Breakpoints de referencia (CSS no permite variables dentro de @media; úsalos de forma literal):
+ *   --bp-movil: 560px · --bp-tablet: 740px · --bp-lateral: 960px · --bp-escritorio: 1120px
+ */
+:root {
+  /* Paleta: azul petróleo y verde salvia sobre fondos claros */
+  --color-ink: #133a49;          /* títulos y texto de máximo contraste */
+  --color-navy: #143b49;
+  --color-navy-dark: #0c2e3c;
+  --color-text: #33474f;         /* cuerpo de lectura */
+  --color-text-soft: #4d646a;    /* textos secundarios */
+  --color-muted: #66797f;        /* metadatos y pies (contraste AA sobre blanco) */
+  --color-accent: #70aa62;       /* verde de marca: acentos, foco, marcadores */
+  --color-accent-strong: #3f7a4a;/* verde legible para texto y enlaces */
+  --color-accent-soft: #e6f1e1;
+  --color-link: #1f5e6b;
+  --color-bg: #fdfefd;
+  --color-paper: #ffffff;
+  --color-surface: #f4f8f2;      /* bandas y paneles suaves */
+  --color-line: #e2ebe4;
+  --color-line-strong: #c9d9cd;
+
+  /* Tipografías */
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-reading: 'Source Serif 4', 'Source Serif Pro', Georgia, Cambria, 'Times New Roman', serif;
+
+  /* Escala tipográfica fluida */
+  --text-xs: .75rem;
+  --text-sm: .875rem;
+  --text-base: 1rem;
+  --text-md: clamp(1.0625rem, 1rem + .25vw, 1.1875rem);   /* cuerpo de lectura */
+  --text-lg: clamp(1.15rem, 1.05rem + .45vw, 1.375rem);   /* entradilla */
+  --text-h4: clamp(1.05rem, 1rem + .25vw, 1.2rem);
+  --text-h3: clamp(1.25rem, 1.1rem + .6vw, 1.55rem);
+  --text-h2: clamp(1.6rem, 1.3rem + 1.3vw, 2.35rem);
+  --text-title: clamp(2.3rem, 1.6rem + 3.2vw, 4.25rem);   /* título de informe */
+  --leading-reading: 1.75;
+  --leading-tight: 1.12;
+
+  /* Espaciado */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6rem;
+  --paragraph-gap: 1.35em;
+
+  /* Bordes */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --border: 1px solid var(--color-line);
+  --border-strong: 1px solid var(--color-line-strong);
+
+  /* Anchos */
+  --width-reading: 42rem;   /* ~68 caracteres por línea */
+  --width-wide: 56rem;      /* figuras y tablas amplias */
+  --width-site: 1290px;
+  --gutter: clamp(20px, 5vw, 54px);
+  --header-offset: 92px;
+
+  /* Alineación del cuerpo (se cambia desde src/config/sitio.ts) */
+  --prose-align: left;
+}

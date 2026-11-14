@@ -1,37 +1,222 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+/**
+ * Plantilla editorial común a todos los informes. Las publicaciones solo aportan
+ * metadatos y texto; tipografía, espacios, imágenes y recomendaciones salen de aquí.
+ */
 import type { MarkdownHeading } from 'astro';
+import { existsSync, statSync } from 'node:fs';
+import { Image, getImage } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
-import { fechaPublicacion } from '../lib/publicaciones';
+import AuthorCard from '../components/AuthorCard.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import CitaInforme from '../components/CitaInforme.astro';
+import { editorial, recomendaciones, sitio } from '../config/sitio';
+import {
+  autorDe, fechaISO, fechaPublicacion, nombreCategoria, rutaAutor, rutaCategoria, rutaEtiqueta,
+  tiempoLectura, todasLasPublicaciones, type Publicacion,
+} from '../lib/publicaciones';
+import { recomendar } from '../lib/recomendaciones';
+import '../styles/prosa.css';
 import '../styles/publicacion.css';
-interface Props { entry: CollectionEntry<'publicaciones'>; headings: MarkdownHeading[]; }
+
+interface Props { entry: Publicacion; headings: MarkdownHeading[]; }
 const { entry, headings } = Astro.props;
 const { data } = entry;
-const sections = headings.filter(heading => heading.depth === 2);
+const autor = await autorDe(entry);
+const categoria = nombreCategoria(data.category);
+const minutos = tiempoLectura(entry);
+const secciones = headings.filter(h => h.depth === 2 && h.slug !== 'footnote-label');
+
+// Recomendaciones: solo publicaciones públicas; nunca la actual ni borradores.
+const publicas = await todasLasPublicaciones();
+const alFinal = recomendar(entry, publicas, { limite: recomendaciones.alFinal, pesos: recomendaciones.pesos });
+const relacionadas = alFinal.slice(0, recomendaciones.enLateral);
+const mostradas = new Set(relacionadas.map(p => p.id));
+const delAutor = publicas
+  .filter(p => p.id !== entry.id && p.data.author.id === autor.id && !mostradas.has(p.id))
+  .slice(0, recomendaciones.enLateral);
+delAutor.forEach(p => mostradas.add(p.id));
+const destacadas = publicas
+  .filter(p => p.id !== entry.id && p.data.featured && !mostradas.has(p.id))
+  .slice(0, recomendaciones.enLateral);
+
+const formatoReferencia = (r: (typeof data.references)[number]) => {
+  if (typeof r === 'string') return { texto: r };
+  const partes = [r.author, r.year && `(${r.year})`].filter(Boolean).join(' ');
+  return { autor: partes, titulo: r.title, editorial: r.publisher, url: r.url, consulta: r.accessed && fechaPublicacion(r.accessed) };
+};
+
+// Datos descargables (opcional): cada archivo debe existir en public/datos/<informe>/.
+const datasets = data.datasets.map(d => {
+  const ruta = `public${d.file}`;
+  if (!d.file.startsWith(`/datos/${entry.id}/`)) throw new Error(`«${entry.id}»: los datos descargables van en public/datos/${entry.id}/ (${d.file}).`);
+  if (!existsSync(ruta)) throw new Error(`«${entry.id}»: no existe ${ruta}, declarado en «datasets».`);
+  const kb = statSync(ruta).size / 1024;
+  const peso = kb < 1024 ? `${Math.max(1, Math.round(kb))} KB` : `${(kb / 1024).toLocaleString('es-DO', { maximumFractionDigits: 1 })} MB`;
+  return { ...d, formato: d.file.split('.').pop()!.toUpperCase(), peso };
+});
+
+const titulo = data.seoTitle ?? `${data.title} | ${sitio.nombre}`;
+const descripcion = data.seoDescription ?? data.description;
+const urlCanonica = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const datosCita = {
+  id: entry.id,
+  titulo: data.title,
+  fecha: data.publishedAt,
+  url: urlCanonica,
+  autor: { nombre: autor.data.name, nombreCita: autor.data.citationName, organizacion: autor.data.kind === 'organizacion' },
+  editorial: sitio.nombre,
+  demo: data.demo,
+};
+const fechaCitation = fechaISO(data.publishedAt).replaceAll('-', '/');
+const imagenSocial = new URL((await getImage({ src: data.coverImage, width: 1200, format: 'jpg' })).src, Astro.site ?? Astro.url).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: descripcion,
+  image: [imagenSocial],
+  datePublished: data.publishedAt.toISOString(),
+  ...(data.updatedAt && { dateModified: data.updatedAt.toISOString() }),
+  author: { '@type': autor.data.kind === 'organizacion' ? 'Organization' : 'Person', name: autor.data.name, url: new URL(rutaAutor(autor.id), Astro.site ?? Astro.url).href },
+  publisher: { '@type': 'Organization', name: sitio.nombre, logo: { '@type': 'ImageObject', url: new URL('/assets/logo.svg', Astro.site ?? Astro.url).href } },
+  articleSection: categoria,
+  keywords: data.tags.join(', '),
+  inLanguage: 'es',
+  mainEntityOfPage: urlCanonica,
+};
 ---
-<BaseLayout title={`${data.title} | Lighthouse D&A`} description={data.description} active="publicaciones" pageClass="article-page" demo={data.demo || data.draft}>
+<BaseLayout
+  title={titulo}
+  description={descripcion}
+  active="publicaciones"
+  pageClass="article-page"
+  demo={data.demo || data.draft}
+  image={data.coverImage}
+  imageAlt={data.coverAlt}
+  type="article"
+  article={{ publishedTime: data.publishedAt, modifiedTime: data.updatedAt, author: autor.data.name, section: categoria, tags: data.tags }}
+  jsonLd={jsonLd}
+>
+  <Fragment slot="head">
+    <meta name="citation_title" content={data.title} />
+    <meta name="citation_author" content={autor.data.citationName ?? autor.data.name} />
+    <meta name="citation_publication_date" content={fechaCitation} />
+    <meta name="citation_technical_report_institution" content={sitio.nombre} />
+    <meta name="citation_language" content="es" />
+    <meta name="citation_abstract_html_url" content={urlCanonica} />
+  </Fragment>
   <main id="contenido">
-    <div class="article-hero">
-      <div class="article-container">
-        <nav class="breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/paginas/publicaciones/">Publicaciones</a></nav>
-        <div class="article-heading">
-          <p class="category">{data.category.toUpperCase()}</p>
-          <h1>{data.title}</h1>
-          <p class="article-deck">{data.description}</p>
-          <div class="article-meta">
-            <div class="author-info"><strong>{data.authors.join(' · ')}</strong><span><time datetime={data.publishedAt.toISOString()}>{fechaPublicacion(data.publishedAt)}</time> · {data.readingMinutes} min de lectura</span></div>
-            <button class="share-button" id="share-button" type="button">Copiar enlace <span aria-hidden="true">↗</span></button>
+    <article class="report" aria-labelledby="report-title">
+      <header class="report-header">
+        <div class="report-header__inner">
+          <p class="print-only report-print-url">{sitio.nombre} · {urlCanonica}</p>
+          <nav class="breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/paginas/publicaciones/">Publicaciones</a><span aria-hidden="true">/</span><a href={rutaCategoria(data.category)}>{categoria}</a></nav>
+          <p class="report-kicker"><a href={rutaCategoria(data.category)}>{categoria}</a></p>
+          <h1 id="report-title">{data.title}</h1>
+          <p class="report-deck">{data.description}</p>
+          <div class="report-byline">
+            <Image class="report-byline__photo" src={autor.data.photo} alt="" width={96} />
+            <div class="report-byline__text">
+              <span>Por <a href={rutaAutor(autor.id)} rel="author">{autor.data.name}</a></span>
+              <span class="report-byline__meta">
+                <time datetime={fechaISO(data.publishedAt)}>{fechaPublicacion(data.publishedAt)}</time>
+                {data.updatedAt && <> · Actualizado el <time datetime={fechaISO(data.updatedAt)}>{fechaPublicacion(data.updatedAt)}</time></>}
+                {' · '}{minutos} min de lectura
+              </span>
+            </div>
+            <div class="report-actions">
+              <button class="share-button" id="share-button" type="button">Copiar enlace <span aria-hidden="true">↗</span></button>
+              <button class="share-button" id="print-button" type="button">Imprimir / PDF</button>
+            </div>
           </div>
           <p class="share-feedback" id="share-feedback" role="status"></p>
+          {data.draft && <p class="report-notice"><strong class="trust-badge">BORRADOR</strong> Vista previa local. Esta publicación se excluye de producción.</p>}
+          {data.demo && <p class="report-notice"><strong class="trust-badge">DEMOSTRACIÓN</strong> Publicación de ejemplo para probar la plantilla editorial. Datos 100 % simulados: ninguna cifra es una estadística real ni el resultado de una investigación oficial.</p>}
         </div>
-        {data.draft && <p class="article-trust"><strong class="trust-badge">BORRADOR</strong> Vista previa local. Esta publicación se excluye de producción.</p>}
-        {data.demo && <p class="article-trust"><strong class="trust-badge">DEMOSTRACIÓN</strong> Datos 100 % simulados. No son estadísticas reales ni resultados de una investigación oficial.</p>}
+        <figure class="report-cover">
+          <Image src={data.coverImage} alt={data.coverAlt} widths={[640, 960, 1280, 1600]} sizes="(max-width: 1240px) 100vw, 1200px" loading="eager" fetchpriority="high" />
+        </figure>
+      </header>
+
+      <div class="report-layout">
+        {secciones.length > 0 && (
+          <nav class="report-toc" aria-label="Índice del informe">
+            <details class="toc" open><summary class="toc-label">En este informe</summary><div class="toc-links">{secciones.map(h => <a href={`#${h.slug}`}>{h.text}</a>)}</div></details>
+          </nav>
+        )}
+
+        <div class="report-main">
+          <div id="articulo" class:list={['prose', { 'prose--justified': editorial.justificarTexto }]}><slot /></div>
+
+          <footer class="report-end">
+            {(data.originalPublishedAt || data.updatedAt) && (
+              <dl class="report-dates">
+                <div><dt>Publicado</dt><dd><time datetime={fechaISO(data.publishedAt)}>{fechaPublicacion(data.publishedAt)}</time></dd></div>
+                {data.originalPublishedAt && <div><dt>Publicación original</dt><dd><time datetime={fechaISO(data.originalPublishedAt)}>{fechaPublicacion(data.originalPublishedAt)}</time></dd></div>}
+                {data.updatedAt && <div><dt>Última actualización</dt><dd><time datetime={fechaISO(data.updatedAt)}>{fechaPublicacion(data.updatedAt)}</time></dd></div>}
+              </dl>
+            )}
+            {data.references.length > 0 && (
+              <section class="report-references" aria-labelledby="referencias">
+                <h2 id="referencias">Referencias</h2>
+                <ol>
+                  {data.references.map(r => {
+                    const ref = formatoReferencia(r);
+                    return 'texto' in ref ? <li>{ref.texto}</li> : (
+                      <li>
+                        {ref.autor && <>{ref.autor}. </>}
+                        {ref.url ? <a href={ref.url}><cite>{ref.titulo}</cite></a> : <cite>{ref.titulo}</cite>}.
+                        {ref.editorial && <> {ref.editorial}.</>}
+                        {ref.consulta && <> Consultado el {ref.consulta}.</>}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
+            )}
+            {datasets.length > 0 && (
+              <section class="report-datasets" aria-labelledby="datos-descargables">
+                <h2 id="datos-descargables">Datos</h2>
+                <ul>
+                  {datasets.map(d => (
+                    <li>
+                      <a href={d.file} download>{d.label}</a>
+                      <span class="report-datasets__meta">{d.formato} · {d.peso}</span>
+                      {d.description && <p>{d.description}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+            <CitaInforme datos={datosCita} />
+            <ul class="report-tags" aria-label="Etiquetas">
+              {data.tags.map(tag => <li><a href={rutaEtiqueta(tag)}>{tag}</a></li>)}
+            </ul>
+            <AuthorCard autor={autor} label={autor.data.kind === 'organizacion' ? 'Sobre los autores' : 'Sobre el autor'} />
+          </footer>
+        </div>
+
+        {(relacionadas.length > 0 || delAutor.length > 0 || destacadas.length > 0) && (
+          <aside class="report-rail" aria-label="Más lecturas">
+            <div class="report-rail__inner">
+              {relacionadas.length > 0 && <section class="rail-block rail-block--related" aria-labelledby="rail-relacionados"><h2 id="rail-relacionados" class="rail-title">Relacionados</h2>{relacionadas.map(p => <PublicationCard post={p} variant="compact" headingLevel="h3" />)}</section>}
+              {delAutor.length > 0 && <section class="rail-block" aria-labelledby="rail-autor"><h2 id="rail-autor" class="rail-title">Más de {autor.data.name}</h2>{delAutor.map(p => <PublicationCard post={p} variant="compact" headingLevel="h3" />)}</section>}
+              {destacadas.length > 0 && <section class="rail-block" aria-labelledby="rail-destacados"><h2 id="rail-destacados" class="rail-title">Destacados</h2>{destacadas.map(p => <PublicationCard post={p} variant="compact" headingLevel="h3" />)}</section>}
+            </div>
+          </aside>
+        )}
       </div>
-    </div>
-    <div class="article-container article-layout">
-      <article id="articulo" class="article-body"><slot /></article>
-      {sections.length > 0 && <aside class="article-sidebar" aria-label="Índice del informe"><details class="toc" open><summary class="toc-label">En este informe</summary><nav>{sections.map(heading => <a href={`#${heading.slug}`}>{heading.text}</a>)}</nav></details></aside>}
-    </div>
+    </article>
+
+    {alFinal.length > 0 && (
+      <section class="report-recommendations" aria-labelledby="recomendaciones">
+        <div class="container">
+          <div class="section-heading"><h2 id="recomendaciones">Sigue leyendo</h2><a class="section-link" href="/paginas/publicaciones/">Todas las publicaciones <span aria-hidden="true">→</span></a></div>
+          <div class="card-grid card-grid--4">{alFinal.map(p => <PublicationCard post={p} headingLevel="h3" />)}</div>
+        </div>
+      </section>
+    )}
   </main>
 </BaseLayout>
 <script>

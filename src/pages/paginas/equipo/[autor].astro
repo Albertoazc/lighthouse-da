@@ -1,0 +1,49 @@
+---
+/** Página individual de autor: /paginas/equipo/<id>/. Se genera para cada archivo de src/content/autores/. */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AuthorCard from '../../../components/AuthorCard.astro';
+import PublicationCard from '../../../components/PublicationCard.astro';
+import { todasLasPublicaciones } from '../../../lib/publicaciones';
+import { sitio } from '../../../config/sitio';
+import '../../../styles/paginas.css';
+
+export async function getStaticPaths() {
+  const autores = await getCollection('autores');
+  return autores.map(autor => ({ params: { autor: autor.id }, props: { autor } }));
+}
+const { autor } = Astro.props;
+const posts = (await todasLasPublicaciones()).filter(p => p.data.author.id === autor.id);
+const soloDemos = posts.length > 0 && posts.every(p => p.data.demo);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': autor.data.kind === 'organizacion' ? 'Organization' : 'Person',
+    name: autor.data.name,
+    description: autor.data.bio,
+    ...(autor.data.kind === 'persona' && { jobTitle: autor.data.role }),
+    sameAs: autor.data.links.map(l => l.url),
+  },
+};
+---
+<BaseLayout title={`${autor.data.name} | ${sitio.nombre}`} description={autor.data.bio} active="equipo" pageClass="section-page" type="profile" image={autor.data.photo} imageAlt={autor.data.photoAlt ?? autor.data.name} jsonLd={jsonLd} demo={soloDemos}>
+  <main id="contenido">
+    <section class="page-hero page-hero--compact" aria-labelledby="page-title"><div class="container">
+      <nav class="page-breadcrumbs" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/paginas/equipo/">Equipo</a><span aria-hidden="true">/</span><span aria-current="page">{autor.data.name}</span></nav>
+      <p class="eyebrow"><span class="square" aria-hidden="true"></span> {autor.data.kind === 'organizacion' ? 'FIRMA COLECTIVA' : 'AUTOR'}</p>
+      <h1 id="page-title">{autor.data.name}<span class="green-period">.</span></h1>
+      <p class="page-lead">{autor.data.role}</p>
+    </div></section>
+    <section class="page-section" aria-label="Perfil"><div class="container author-profile">
+      <AuthorCard autor={autor} label="Perfil" extended headingLevel="h2" />
+    </div></section>
+    <section class="page-section" aria-labelledby="author-posts"><div class="container">
+      <div class="section-heading"><h2 id="author-posts">Publicaciones</h2></div>
+      {posts.some(p => p.data.demo) && <p class="sample-note"><span class="sample-dot" aria-hidden="true"></span> Las publicaciones marcadas como «Demostración» utilizan datos simulados.</p>}
+      {posts.length > 0
+        ? <div class="card-grid">{posts.map(post => <PublicationCard post={post} headingLevel="h3" />)}</div>
+        : <p class="empty-state">Todavía no hay publicaciones firmadas por este autor.</p>}
+    </div></section>
+  </main>
+</BaseLayout>

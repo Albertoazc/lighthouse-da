@@ -1,4 +1,8 @@
 ---
+/**
+ * Ruta dinámica única para todos los informes: /publicaciones/<archivo>/.
+ * Los borradores solo generan página en desarrollo (npm run dev).
+ */
 import { getCollection, render } from 'astro:content';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 export async function getStaticPaths() {

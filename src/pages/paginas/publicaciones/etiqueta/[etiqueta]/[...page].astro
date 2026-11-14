@@ -1,0 +1,24 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Catalogo from '../../../../../components/Catalogo.astro';
+import { editorial } from '../../../../../config/sitio';
+import { etiquetas, todasLasPublicaciones, rutaEtiqueta } from '../../../../../lib/publicaciones';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await todasLasPublicaciones();
+  return etiquetas(posts).flatMap(tema =>
+    paginate(tema.posts, { params: { etiqueta: tema.slug }, props: { tema: { slug: tema.slug, nombre: tema.nombre } }, pageSize: editorial.publicacionesPorPagina }));
+}) satisfies GetStaticPaths;
+
+const { page, tema } = Astro.props;
+---
+<Catalogo
+  page={page}
+  title={tema.nombre}
+  eyebrow="TEMA"
+  lead={`Publicaciones etiquetadas con «${tema.nombre}».`}
+  metaTitle={`${tema.nombre} · Publicaciones`}
+  metaDescription={`Publicaciones de Lighthouse D&A sobre ${tema.nombre}.`}
+  etiquetaActual={tema.slug}
+  breadcrumb={[{ label: `Tema: ${tema.nombre}`, href: rutaEtiqueta(tema.nombre) }]}
+/>

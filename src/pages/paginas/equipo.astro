@@ -1,6 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { autores, rutaAutor, todasLasPublicaciones } from '../../lib/publicaciones';
 import '../../styles/paginas.css';
+// Los perfiles salen de src/content/autores/: añadir un archivo YAML basta para que aparezca aquí.
+const [lista, posts] = await Promise.all([autores(), todasLasPublicaciones()]);
+const total = (id: string) => posts.filter(p => p.data.author.id === id).length;
 ---
 <BaseLayout title="Equipo | Lighthouse D&A" description="Investigación, datos, visualización y edición: las áreas de trabajo de Lighthouse D&A. Perfiles del equipo en preparación." active="equipo" pageClass="section-page"><main id="contenido">
     <section class="page-hero" aria-labelledby="page-title"><div class="container">
@@ -8,7 +13,23 @@ import '../../styles/paginas.css';
       <p class="eyebrow"><span class="square" aria-hidden="true"></span> LAS PERSONAS Y EL PROYECTO</p>
       <h1 id="page-title">Detrás de las preguntas<span class="green-period">.</span></h1>
       <p class="page-lead">El análisis de datos reúne distintas miradas: investigar, interpretar, diseñar y escribir. Esa conversación es parte de lo que queremos construir.</p>
-      <p class="draft-note">Estamos preparando los perfiles del equipo. Próximamente encontrarás aquí sus nombres, trayectorias y publicaciones.</p>
+      <p class="draft-note">Estamos preparando los perfiles individuales del equipo. A medida que se presenten, aparecerán aquí con sus trayectorias y publicaciones.</p>
+    </div></section>
+    <section class="page-section" aria-labelledby="authors-title"><div class="container">
+      <h2 id="authors-title">Autores</h2><p class="section-intro">Quienes firman las publicaciones de Lighthouse D&amp;A.</p>
+      <div class="authors-grid">
+        {lista.map(autor => (
+          <article class="author-tile">
+            <Image class="author-tile__photo" src={autor.data.photo} alt={autor.data.photoAlt ?? `Fotografía de ${autor.data.name}`} width={240} />
+            <div>
+              <h3><a href={rutaAutor(autor.id)}>{autor.data.name}</a></h3>
+              <p class="author-tile__role">{autor.data.role}</p>
+              <p>{autor.data.bio}</p>
+              <p class="author-tile__count">{total(autor.id) === 1 ? '1 publicación' : `${total(autor.id)} publicaciones`}</p>
+            </div>
+          </article>
+        ))}
+      </div>
     </div></section>
     <section class="page-section" aria-labelledby="team-title"><div class="container">
       <h2 id="team-title">Áreas que dan forma al proyecto</h2><p class="section-intro">Un primer esquema de las contribuciones que queremos reunir en Lighthouse D&amp;A.</p>

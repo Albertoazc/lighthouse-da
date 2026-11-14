@@ -1,0 +1,5 @@
+# Kit de gráficos de Lighthouse D&A
+# Instalación:  python -m pip install -r analisis/requirements.txt
+matplotlib>=3.8
+plotly>=5.20
+pandas>=2.1

@@ -1,0 +1,21 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Catalogo from '../../../components/Catalogo.astro';
+import { editorial } from '../../../config/sitio';
+import { todasLasPublicaciones } from '../../../lib/publicaciones';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await todasLasPublicaciones();
+  return paginate(posts, { pageSize: editorial.publicacionesPorPagina });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+<Catalogo
+  page={page}
+  title="Publicaciones"
+  eyebrow="EL ESPACIO EDITORIAL"
+  lead="Informes, análisis y artículos sobre economía, políticas públicas, mercados y datos."
+  metaTitle="Publicaciones"
+  metaDescription="Catálogo editorial de Lighthouse D&A: investigaciones, análisis y demostraciones identificadas con transparencia."
+/>
